@@ -2,26 +2,7 @@
 
 <body>
 
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="http://localhost:3000">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="http://localhost:3000/registration">Register</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<%-include("nav_before_login") %>
 
 <section class="text-center text-lg-start">
 
@@ -29,21 +10,20 @@
         <div class="row g-0 align-items-center">
             <div class="mx-auto col-lg-6 mb-5 mb-lg-0">
                 <div class="card cascading-right">
-                    <!--                     style="background: hsla(0, 0%, 100%, 0.55);backdrop-filter: blur(30px);">-->
 
                     <div class="mx-auto card-body p-5 shadow-5 text-center">
-                        <h2 class="fw-bold mb-5">Sign up now</h2>
-                        <form>
+                        <h2 class="fw-bold mb-5">Login now</h2>
+                        <form method="post" action="/login">
                             <div class="row">
                                 <div class="col-md-6 mb-4">
                                     <div class="form-outline">
-                                        <input type="text" id="form3Example1" class="form-control"/>
+                                        <input type="text" name="firstName" id="form3Example1" class="form-control"/>
                                         <label class="form-label" for="form3Example1">First name</label>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-4">
                                     <div class="form-outline">
-                                        <input type="text" id="form3Example2" class="form-control"/>
+                                        <input type="text" name="lastName" id="form3Example2" class="form-control"/>
                                         <label class="form-label" for="form3Example2">Last name</label>
                                     </div>
                                 </div>
@@ -51,17 +31,17 @@
 
                             <!-- Email input -->
                             <div class="form-outline mb-4">
-                                <input type="email" id="form3Example3" class="form-control"/>
+                                <input type="email" name="eMail" id="form3Example3" class="form-control"/>
                                 <label class="form-label" for="form3Example3">Email address</label>
                             </div>
 
                             <!-- Password input -->
                             <div class="form-outline mb-4">
-                                <input type="password" id="form3Example4" class="form-control"/>
+                                <input type="password" name="password" id="form3Example4" class="form-control"/>
                                 <label class="form-label" for="form3Example4">Password</label>
                             </div>
                             <button type="submit" class="btn btn-primary btn-block mb-4">
-                                Sign up
+                                Log In
                             </button>
                         </form>
                     </div>
