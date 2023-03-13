@@ -1,36 +1,44 @@
 const express = require("express");
-const server = express();
+const app = express();
 const bodyParse = require("body-parser");
 const collection = require("./mongodb")
 
 const port = 3000;
 const projectName = "MyBank";
 
-server.use(bodyParse.urlencoded({extended: true}));
-server.use(express.static("assets"));
-server.set("view engine", "ejs");
+let isLogged = false;
 
-server.get("/", function (req, res) {
+app.use(bodyParse.urlencoded({extended: true}));
+app.use(express.static("assets"));
+app.set("view engine", "ejs");
+
+app.get("/", function (req, res) {
+    isLogged = false;
     res.render("home_page", {projectName: projectName});
 });
 
-server.get("/login", function (req, res) {
+app.get("/login", function (req, res) {
     res.render("login", {projectName: projectName});
 });
 
-server.get("/registration", function (req, res) {
+app.get("/registration", function (req, res) {
     res.render("registration", {projectName: projectName});
 });
 
-server.get("/about", function (req, res) {
+app.get("/about", function (req, res) {
     res.render("about_us", {projectName: projectName});
 });
 
-server.get("/main", function (req, res){
-    res.render("main", {projectName: projectName})
+app.get("/main", function (req, res){
+    if(isLogged){
+        res.render("main", {projectName: projectName})
+    }
+    else{
+        res.redirect("/login")
+    }
 })
 
-server.post("/register", async(req, res)=>{
+app.post("/register", async(req, res)=>{
     if(await collection.findOne({eMail: req.body.eMail})){
         console.log(req.body);
         res.status(400).send({
@@ -38,17 +46,19 @@ server.post("/register", async(req, res)=>{
         })
         return
     }
-    await new collection(req.body).save()
-    res.redirect("/main")
-    res.render("main", {projectName: projectName})
+    else{
+        await new collection(req.body).save()
+        isLogged = true
+        res.redirect("/main")
+    }
 })
 
-server.post("/login", async(req, res)=>{
+app.post("/login", async(req, res)=>{
     try{
         const check = await collection.findOne({name:req.body.name})
         if(check.password===req.body.password){
+            isLogged = true;
             res.redirect("/main")
-            res.render("main", {projectName: projectName})
         }
         else{
             res.send("wrong password")
@@ -59,6 +69,6 @@ server.post("/login", async(req, res)=>{
     }
 })
 
-server.listen(port, function () {
-    console.log("Server is running on port " + port + ".");
+app.listen(port, function () {
+    console.log("app is running on port " + port + ".");
 });
