@@ -15,7 +15,6 @@ exports.createTables = function (db) {
         if (err) {
             console.log(err.message);
         } else {
-            console.log("Table created");
         }
     });
 }
