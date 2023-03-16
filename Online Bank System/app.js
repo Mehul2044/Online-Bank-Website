@@ -8,7 +8,7 @@ const port = 3000;
 const projectName = "MyBank";
 
 const db = relation.connect();
-relation.createTable(db);
+relation.createTables(db);
 
 let isLogged = false;
 
@@ -69,15 +69,15 @@ app.get("/main", function (req, res) {
 // })
 
 app.post("/login", async (req, res) => {
-    eMail = req.body.eMail;
+    account_number = req.body.account_number;
     password = req.body.password;
-
-    await db.get(`SELECT password FROM user WHERE eMail = ?`, [eMail], (err, row) => {
+    await db.get("SELECT password FROM accounts WHERE account_number = ?", [account_number], (err, row) => {
         if (err) {
             console.error(err.message);
             return;
         }
         if (row) {
+            console.log("yey")
             let password_check;
             console.log(row.password);
             password_check = row.password
@@ -92,8 +92,10 @@ app.post("/login", async (req, res) => {
 })
 
 app.post("/register", async (req, res) => {
-    eMail = req.body.eMail
-    password = req.body.password
+    let firstName = req.body.firstName
+    let lastName = req.body.lastName
+    let eMail = req.body.eMail
+    let password = req.body.password
 
     let exist = false;
     await db.get(`SELECT * FROM user WHERE eMail = ?`, [eMail], (err, row) => {
@@ -103,27 +105,27 @@ app.post("/register", async (req, res) => {
         }
 
         if (row) {
-            console.log(`The email ${eMail} exists in the database`);
+            console.log(`Account already exists.`);
             exist = true;
         }
     });
 
     if (exist) {
         res.status(400).send({
-            message: "Email already exists"
+            message: "Account already exists."
         });
     }
 
     else {
-        db.run("insert into user values ('" + firstName + "','" + lastName + "','" + eMail + "','" + password + "')", err => {
+        db.run("insert into accounts (fname, lname, email, password) values ('" + firstName + "','" + lastName + "','" + eMail + "','" + password + "')", err => {
             if (err) {
                 console.log(err);
             } else {
                 console.log("Inserted data");
+                isLogged = true;
+                res.redirect("/main");
             }
         });
-        isLogged = true;
-        res.redirect("/main");
     }
 
 })
