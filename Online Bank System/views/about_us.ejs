@@ -1,7 +1,41 @@
 <%- include("header") %>
+<link rel="stylesheet" href="bootstrap/css/bootstrap.css" crossorigin="anonymous">
+<link rel="stylesheet" href="css/about_us.css">
+<script src="bootstrap/js/bootstrap.js" crossorigin="anonymous" defer></script>
+<script src="jquery-3.6.4.js" defer></script>
+<title><%= projectName %></title>
+</head>
 
 <body>
-    <%-include("nav_before_login") %>
+
+<%- include("nav_before_login") %>
+
+<div class="section">
+    <div class="container">
+        <div class="content-section">
+            <div class="title">
+                About Us
+            </div>
+            <div class="content">
+                <h3>Log In To your Bank Internet Banking</h3>
+                <p>Manage your finances conveniently and securely with ICICI Bank Internet Banking, right from
+                    the comfort of your home or your office. Getting started with our  Internet Banking portal
+                    is simple. All you need is your user ID and password to use our internet banking services.
+                    If you have opened an account with us recently, you can find your user ID and password for
+                    our Internet Banking facility in the Welcome Kit you received at the time of opening of your
+                    account.</p>
+                <br>
+                <div class="button">
+                    <a href="">Read More</a>
+                </div>
+            </div>
+        </div>
+        <div class="image-section">
+            <img src="images/one.jpg">
+        </div>
+    </div>
+</div>
+
 </body>
 
 <%- include("footer") %>
