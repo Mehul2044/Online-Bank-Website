@@ -1,9 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
-*{
+
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     /*font-family: 'Poppins', sans-serif;*/
+}
+
+body {
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 /*.topnav {*/
@@ -35,57 +41,57 @@
 /*    transition:0.3s ease-in;*/
 /*}*/
 
-.section{
+.section {
     width: 100%;
     min-height: 100vh;
     background-color: rgb(255, 255, 255)
 }
 
-.container{
+.container {
     display: inline-block;
     margin: auto;
     padding-top: 100px;
 }
 
-.content-section{
+.content-section {
     margin-left: 8%;
     float: left;
     width: 55%;
 }
 
-.image-section{
+.image-section {
     margin-top: 2%;
     float: right;
     width: 30%;
 }
 
-.image-section img{
+.image-section img {
     width: 100%;
     height: auto;
 }
 
-.content-section .title{
+.content-section .title {
     text-transform: uppercase;
     text-align: center;
     font-weight: bold;
     font-size: 50px;
 }
 
-.content-section .content h3{
+.content-section .content h3 {
     margin-top: 20px;
     color: #6c2424;
     font-size: 21px;
     text-transform: uppercase;
 }
 
-.content-section .content p{
+.content-section .content p {
     margin-top: 10px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 18px;
     line-height: 1.5;
 }
 
-.button a{
+.button a {
     background-color: #6c2424;
     padding: 12px 50px;
     text-decoration: none;
@@ -99,22 +105,24 @@
     color: rgb(255, 255, 255);
     background-color: #221a75;
     font-weight: bold;
-    transition:0.3s ease-in;
+    transition: 0.3s ease-in;
 }
 
 @media screen and (max-width: 768px) {
-    .container{
+    .container {
         display: inline-block;
         margin: auto;
         padding-top: 50px;
     }
-    .content-section{
+
+    .content-section {
         float: left;
         width: 100%;
         display: block;
         margin: auto;
     }
-    .image-section{
+
+    .image-section {
         margin-top: 2%;
         margin-left: 8%;
         float: left;
@@ -126,6 +134,6 @@
     text-align: center;
 }
 
-.button a{
+.button a {
     padding: 9px 30px;
 }

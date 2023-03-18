@@ -4,8 +4,7 @@ const app = express();
 const bodyParse = require("body-parser");
 // const collection = require("./models/mongodb");
 const relation = require("./models/sqlite");
-const async = require("async");
-
+require("async");
 const port = process.env.PORT;
 const projectName = "MyBank";
 
