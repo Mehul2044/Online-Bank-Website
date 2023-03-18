@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const bodyParse = require("body-parser");
@@ -5,7 +6,7 @@ const bodyParse = require("body-parser");
 const relation = require("./sqlite");
 const async = require("async");
 
-const port = 3000;
+const port = process.env.PORT;
 const projectName = "MyBank";
 
 const db = relation.connect();
