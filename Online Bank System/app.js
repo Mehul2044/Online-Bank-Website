@@ -36,11 +36,19 @@ app.get("/about", function (req, res) {
 
 app.get("/main", function (req, res) {
     if (isLogged) {
-        res.render("main", {projectName: projectName})
+        res.render("main", {projectName: projectName});
     } else {
         res.redirect("/login")
     }
-})
+});
+
+app.get("/main/transfer", function (req, res) {
+    if (isLogged) {
+        res.render("transfer", {projectName: projectName});
+    } else {
+        res.redirect("/login");
+    }
+});
 
 app.post("/login", async (req, res) => {
     let account_number = req.body.account_number;

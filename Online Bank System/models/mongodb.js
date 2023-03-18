@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+require("dotenv").config();
 
 try {
     // mongoose.connect("mongodb+srv://admin:admin@ffsdc16.pklkjft.mongodb.net/TEST?retryWrites=true&w=majority")
