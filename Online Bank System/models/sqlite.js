@@ -1,7 +1,7 @@
 const sqlite3 = require("sqlite3").verbose();
 
 exports.connect = function () {
-    return new sqlite3.Database(__dirname + "/data/database.db", err => {
+    return new sqlite3.Database("./data/database.db", err => {
         if (err) {
             console.log(err.message);
         } else {

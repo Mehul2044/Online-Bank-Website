@@ -2,8 +2,8 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const bodyParse = require("body-parser");
-// const collection = require("./mongodb");
-const relation = require("./sqlite");
+// const collection = require("./models/mongodb");
+const relation = require("./models/sqlite");
 const async = require("async");
 
 const port = process.env.PORT;
@@ -57,7 +57,7 @@ app.post("/login", async (req, res) => {
             if (password_check === password) {
                 isLogged = true;
                 res.redirect("/main")
-            }else {
+            } else {
                 res.send("Details do not match.");
             }
         } else {
@@ -73,6 +73,7 @@ app.post("/register", async (req, res) => {
     let password = req.body.password
 
     let exist;
+
     function checkAccountExists(eMail) {
         return new Promise((resolve, reject) => {
             db.get(`SELECT * FROM accounts WHERE eMail = ?`, [eMail], (err, row) => {
@@ -88,9 +89,7 @@ app.post("/register", async (req, res) => {
 
     exist = await checkAccountExists(eMail);
     if (exist) {
-        res.status(400).send({
-            message: "Account already exists."
-        });
+        res.send("Account already exists.");
     } else if (!exist) {
         db.run("insert into accounts (fname, lname, email, password) values " +
             "('" + firstName + "','" + lastName + "','" + eMail + "','" + password + "')", err => {
