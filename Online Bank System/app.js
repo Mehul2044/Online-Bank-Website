@@ -12,6 +12,7 @@ const db = relation.connect();
 relation.createTables(db);
 
 let isLogged = false;
+let userName;
 
 app.use(bodyParse.urlencoded({extended: true}));
 app.use(express.static("assets"));
@@ -36,7 +37,7 @@ app.get("/about", function (req, res) {
 
 app.get("/main", function (req, res) {
     if (isLogged) {
-        res.render("main", {projectName: projectName});
+        res.render("main", {projectName: projectName, userName: userName});
     } else {
         res.redirect("/login")
     }
@@ -44,7 +45,7 @@ app.get("/main", function (req, res) {
 
 app.get("/main/transfer", function (req, res) {
     if (isLogged) {
-        res.render("transfer", {projectName: projectName});
+        res.render("transfer", {projectName: projectName, userName: userName});
     } else {
         res.redirect("/login");
     }
@@ -53,7 +54,7 @@ app.get("/main/transfer", function (req, res) {
 app.post("/login", async (req, res) => {
     let account_number = req.body.account_number;
     let password = req.body.password;
-    await db.get("SELECT password FROM accounts WHERE account_number = ?", [account_number], (err, row) => {
+    await db.get("SELECT password, fname FROM accounts WHERE account_number = ?", [account_number], (err, row) => {
         if (err) {
             console.error(err.message);
             return;
@@ -63,6 +64,7 @@ app.post("/login", async (req, res) => {
             password_check = row.password
             if (password_check === password) {
                 isLogged = true;
+                userName = row.fname;
                 res.redirect("/main")
             } else {
                 res.send("Details do not match.");
@@ -107,6 +109,7 @@ app.post("/register", async (req, res) => {
                 res.redirect("/main");
             }
         });
+        userName = firstName;
     }
 });
 
