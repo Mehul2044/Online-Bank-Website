@@ -5,7 +5,11 @@
 
 <body>
 
-<%- include("partials/nav_before_login") %>
+<% if (isLogged) { %>
+    <%- include("partials/nav_after_login") %>
+<% } else { %>
+    <%- include("partials/nav_before_login") %>
+<% } %>
 
 <div class="section">
     <div class="container">
@@ -43,6 +47,7 @@
     </div>
 </div>
 
-</body>
-
 <%- include("partials/footer") %>
+
+</body>
+</html>

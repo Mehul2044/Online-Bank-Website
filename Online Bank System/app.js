@@ -24,15 +24,25 @@ app.get("/", function (req, res) {
 });
 
 app.get("/login", function (req, res) {
+    isLogged = false;
     res.render("login", {projectName: projectName});
 });
 
 app.get("/registration", function (req, res) {
+    isLogged = false;
     res.render("registration", {projectName: projectName});
 });
 
 app.get("/about", function (req, res) {
-    res.render("about_us", {projectName: projectName});
+    res.render("about_us", {projectName: projectName, isLogged: isLogged, userName: userName});
+});
+
+app.get("/terms_conditions", function (req, res) {
+    res.render("terms_conditions", {projectName: projectName, isLogged: isLogged, userName: userName, req: req});
+});
+
+app.get("/contact_us", function (req, res) {
+    res.render("contact_us", {projectName: projectName, isLogged: isLogged, userName: userName});
 });
 
 app.get("/main", function (req, res) {
@@ -70,10 +80,10 @@ app.post("/login", async (req, res) => {
                 res.send("Details do not match.");
             }
         } else {
-            res.send("Details do not match");
+            res.send("Details do not match.");
         }
     });
-})
+});
 
 app.post("/register", async (req, res) => {
     let firstName = req.body.firstName

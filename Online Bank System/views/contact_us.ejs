@@ -1,0 +1,76 @@
+<%- include("partials/header") %>
+<link rel="stylesheet" href="/css/contact_us.css">
+<title><%= projectName %></title>
+<script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+</head>
+
+<body>
+
+<% if (isLogged) { %>
+    <%- include("partials/nav_after_login") %>
+<% } else { %>
+    <%- include("partials/nav_before_login") %>
+<% } %>
+
+<div class="section">
+
+    <div class="container">
+
+        <h1>Customer Care Services</h1>
+        <p>Dear Customer, a very warm welcome to our Banking website, you can contact us through our customer care
+            services.<br>
+            You can either contact us using our phone number or Email I'd or raise a query.<br>
+            Your queries will be answered within 48 hours.</p>
+        <h2>
+            <box-icon name='envelope' id="email_logo"></box-icon>
+            Email ID
+        </h2>
+        <p id="email_id">banking!123@gmail.com</p>
+        <h3>
+            <box-icon name='phone' id="phone_logo"></box-icon>
+            Phone number
+        </h3>
+        <p id="phone_num">7654334567</p>
+        <div class="contactbox">
+            <div class="contact-left">
+                <h2>Send Your Queries</h2>
+                <br>
+                <form>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label>Name</label>
+                            <input type="text" placeholder="Your Name">
+                        </div>
+                        <br>
+                        <div class="input-group">
+                            <label>Phone number</label>
+                            <input type="number" placeholder="10 digit phone Number"><i class="fa fa-phone" aria-hidden="true"></i>
+                        </div>
+                        <br>
+                        <div class="input-group">
+                            <label>Account number</label>
+                            <input type="number" placeholder="A/C No.">
+                        </div>
+                        <br>
+                        <div class="input-group">
+                            <label>Querie Title</label>
+                            <input type="text" placeholder="Enter your query here">
+                        </div>
+                        <br>
+                    </div>
+                    <br>
+                    <label id="queries_label">Queries</label>
+                    <textarea id="box_text" rows="10" placeholder="Your Message"></textarea>
+                    <br>
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<%- include("partials/footer") %>
+
+</body>

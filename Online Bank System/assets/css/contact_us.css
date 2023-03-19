@@ -1,0 +1,154 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.section{
+    font-family: 'Poppins', sans-serif;
+}
+
+.container {
+    width: 80%;
+    margin: 50px auto;
+    font-weight: bold;
+}
+
+.contactbox {
+    border: 1px solid #6c2424;
+}
+
+.contact-left {
+    padding: 7% 9%;
+    text-align: left;
+}
+
+.contact-right {
+    padding: 4%;
+}
+
+#phone_num {
+    margin-left: 3%;
+}
+
+#email_id {
+    margin-left: 3%;
+}
+
+.container h1 {
+    margin-bottom: 10px;
+    color: #6c2424;
+    font-weight: bold;
+}
+
+.container h2 {
+    display: flex;
+    align-items: center;
+    color: #6c2424;
+    font-weight: bold;
+}
+
+.container h3 {
+    display: flex;
+    align-items: center;
+    color: #6c2424;
+    font-weight: bolder;
+}
+
+#phone_logo {
+    width: 2%;
+    margin-right: 1%;
+}
+
+#email_logo {
+    width: 2%;
+    margin-right: 1%;
+}
+
+.container p {
+    margin-bottom: 40px;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    border: none;
+    border-bottom: 1.5px solid #080808;
+    outline: none;
+    padding-bottom: 10px;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-align: left;
+}
+
+#box_text {
+    width: 100%;
+    border: 1px solid #080808;
+    outline: none;
+    box-sizing: border-box;
+    font-weight: bold;
+    padding: 3%;
+    resize: none;
+}
+
+label {
+    margin-bottom: 1%;
+    display: block;
+    color: #6c2424;
+    font-weight: bold;
+}
+
+.container button {
+    margin-top: 3rem;
+    background-color: #6c2424;
+    padding: 1% 2.5%;
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    font-size: 13px;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+
+.container button:hover {
+    background-color: darkolivegreen;
+    color: whitesmoke;
+    transition: 0.3s ease-in-out;
+
+}
+
+
+@media screen and (max-width: 768px) {
+    .container {
+        display: inline-block;
+        margin: auto;
+        padding-top: 50px;
+    }
+
+    .contactbox {
+        float: left;
+        width: 100%;
+        display: block;
+        margin: auto;
+    }
+
+    .contact-left {
+        margin-left: 8%;
+        float: left;
+        width: 100%;
+        display: block;
+    }
+
+    .contact-right {
+        margin-left: 8%;
+        float: left;
+        width: 100%;
+        display: block;
+    }
+
+
+    .button {
+        text-align: center;
+    }
+}
