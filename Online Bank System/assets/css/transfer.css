@@ -1,8 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap');
 
-body {
-    background-color: #06ad2285;
-}
 
 * {
     margin: 0;
@@ -13,7 +10,7 @@ body {
 }
 
 .container {
-    background-color: #06ad2285;
+    background-color: #4682B4;
     padding: 10px 40px;
     min-height: 80vh;
     margin: 6.5rem auto 20px;
@@ -75,7 +72,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #06ad22;
+    background-color: #003366;
     font-weight: 600;
     outline: none;
     border: none;
