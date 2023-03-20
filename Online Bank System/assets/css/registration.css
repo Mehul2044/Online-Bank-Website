@@ -1,7 +1,7 @@
 body {
-    /*background-color: #00c3f9;*/
+    background-color: #00c3f9;
     margin: 0;
-    background-image: url("/images/login_bank_image.jpg");
+    background-image: url("/images/register_bank_image.jpg");
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: 100% 100%;
@@ -11,9 +11,9 @@ form {
     font-size: 1.3rem;
     min-width: 700px;
     min-height: 400px;
-    margin: 10rem auto;
-    padding: 50px 20px 20px 50px;
-    background-color: rgba(255, 255, 255, 0.1);
+    margin: 8rem auto;
+    padding: 60px 20px 20px 50px;
+    background-color: rgba(0, 0, 0, 0.6);
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     float: left;
@@ -35,7 +35,7 @@ input[type="submit"] {
     margin-top: 10%;
     margin-left: auto;
     margin-right: auto;
-    background-color: #0053f9;
+    background-color: navy;
     color: rgb(255, 223, 223);
     padding: 10px 20px;
     border: none;
@@ -45,7 +45,7 @@ input[type="submit"] {
 
 
 input[type="submit"]:hover {
-    background-color: navy;
+    background-color: #0053f9;
 }
 
 input::placeholder {
@@ -58,22 +58,6 @@ h1 {
     padding-left: 20px;
 }
 
-.sign-up{
-    display: flex;
-    /*flex-direction: row;*/
-    justify-content: center;
-    align-items: center;
-}
-
-input[type="button"] {
-    background-color: #0053f9;
-    color: rgb(255, 223, 223);
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-input[type="button"]:hover {
-    background-color: navy;
+.confirm{
+    margin-bottom: -2rem;
 }

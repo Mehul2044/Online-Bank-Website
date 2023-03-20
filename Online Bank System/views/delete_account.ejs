@@ -1,0 +1,29 @@
+<%- include("partials/header") %>
+<title><%= projectName %></title>
+<link rel="stylesheet" href="/css/delete_account.css">
+</head>
+
+<body>
+
+<%- include("partials/nav_after_login") %>
+
+<form method="post" action="/main/delete_account">
+    <label for="aadhar">Aadhaar Number:</label>
+        <input type="tel" name="aadhar" required>
+    <label for="option">Reason:</label>
+    <label>
+        <select required name="reason">
+            <option id="reason">
+            <option value="No use/No need">No use/No need</option>
+            <option value="Cannot Maintain">Cannot Maintain</option>
+            <option value="Did not like the service">Did not like the service</option>
+            <option value="Others/Need not specify">Others/Need not specify</option>
+        </select>
+    </label>
+    <br>
+    <input type="submit">
+</form>
+
+<%- include("partials/footer") %>
+
+</body>

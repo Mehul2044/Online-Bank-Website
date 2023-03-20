@@ -1,0 +1,41 @@
+<%- include("partials/header") %>
+<title><%= projectName %></title>
+<link rel="stylesheet" href="/css/update_profile.css">
+</head>
+
+<body>
+
+<%- include("partials/nav_after_login") %>
+
+<form action="/main/update_profile" method="post">
+    <img src="/images/profile_image.jpeg" width="200" height="200" alt="profile-image"/>
+    <br><br>
+<!--    <input type="file" name="image">-->
+    <input name="Submit" type="submit" value="Upload image">
+    <label for="fname">First Name</label>
+    <input type="text" id="fname" name="firstName" placeholder="First Name">
+    <label for="lname">Last Name</label>
+    <input type="text" id="lname" name="lastName" placeholder="Last Name">
+    <label for="radio">Gender</label>
+    <label>
+        <select>
+            <option id="Gender">
+            <option value="l1">Male</option>
+            <option value="l2">Female</option>
+            <option value="l3">others</option>
+        </select>
+    </label>
+    <br>
+    <label for="email">Email-ID:</label>
+    <input type="email" id="email" name="email" placeholder="abc123@sample.com">
+<!--    <label for="address">Residential Address</label>-->
+<!--        <input type="textarea" name="address">-->
+<!--    <P><label for="full name">Personal Phone Number </label>-->
+<!--        <input type="tel" name="tel"></P>-->
+    <input type="submit" value="Save">
+</form>
+
+<%- include("partials/footer") %>
+
+</body>
+</html>

@@ -12,8 +12,8 @@
 .container {
     background-color: #4682B4;
     padding: 10px 40px;
-    min-height: 80vh;
-    margin: 6.5rem auto 20px;
+    min-height: 75vh;
+    margin: 5rem auto 20px;
 }
 
 .container .content {
