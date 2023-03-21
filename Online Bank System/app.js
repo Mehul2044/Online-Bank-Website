@@ -5,6 +5,9 @@ const bodyParse = require("body-parser");
 // const collection = require("./models/mongodb");
 const relation = require("./models/sqlite");
 require("async");
+
+const date = require("./custome_node_modules/date");
+
 const port = process.env.PORT;
 const projectName = "MyBank";
 
@@ -51,7 +54,8 @@ app.get("/contact_us", function (req, res) {
 
 app.get("/main", function (req, res) {
     if (isLogged) {
-        res.render("main", {projectName: projectName, fName: fName});
+        let dateString = date.getDate();
+        res.render("main", {projectName: projectName, fName: fName, date: dateString});
     } else {
         res.redirect("/login");
     }
