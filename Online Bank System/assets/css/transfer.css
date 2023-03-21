@@ -39,6 +39,7 @@
 }
 
 .container form {
+    border-radius: 5%;
     font-weight: bold;
     margin-top: 10rem;
     max-width: 400px;
