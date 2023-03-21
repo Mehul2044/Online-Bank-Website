@@ -92,7 +92,7 @@ app.get("/main/logout", function (req, res) {
 app.post("/login", async (req, res) => {
     account_number = req.body.account_number;
     let password = req.body.password;
-    await db.get("SELECT password, fname, email FROM accounts WHERE account_number = ?", [account_number], (err, row) => {
+    await db.get("SELECT * FROM accounts WHERE account_number = ?", [account_number], (err, row) => {
         if (err) {
             console.error(err.message);
             return;
@@ -103,6 +103,7 @@ app.post("/login", async (req, res) => {
             if (password_check === password) {
                 isLogged = true;
                 fName = row.fname;
+                lastName = row.lname;
                 eMail = row.email;
                 res.redirect("/main")
             } else {
