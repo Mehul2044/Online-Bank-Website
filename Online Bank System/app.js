@@ -168,7 +168,13 @@ app.post("/registration", async (req, res) => {
                         fName = row.fname;
                         eMail = row.email;
                         account_number = row.account_number;
-                        res.redirect("/main");
+                        db.run("insert into balance values(?, ?);", [account_number, 0], err => {
+                            if (err) {
+                                console.log(err.message);
+                            } else {
+                                res.redirect("/main");
+                            }
+                        });
                     }
                 });
             }
@@ -282,7 +288,7 @@ app.post("/main/loan/apply_loan", function (req, res) {
     db.run("insert into loan values(?, ?, ?, ?);", [account_number, loan_amount, loan_type, reason], err => {
         if (err) {
             console.log(err.message);
-        }else {
+        } else {
             res.redirect("/main");
         }
     });
