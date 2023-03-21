@@ -9,18 +9,18 @@
 
 <form action="/main/loan/apply_loan" method="post">
     <label for="dob">Date of Birth:</label>
-    <input type="datetime-local" id="dob" name="dob" required>
+    <input type="date" id="dob" name="dob" required>
     <label for="amount">Amount:</label>
     <input type="text" id="amount" name="amount" required>
     <label for="radio">Loan Type:</label>
     <label>
-        <select required>
+        <select required name="loan_type">
             <option id="loantype">
-            <option value="l1">Home Loan</option>
-            <option value="l2">Personal Loan</option>
-            <option value="l3">Education Loan</option>
-            <option value="l4">Vehicle Loan</option>
-            <option value="l5">Mortgage Loan</option>
+            <option value="Home Loan">Home Loan</option>
+            <option value="Personal Loan">Personal Loan</option>
+            <option value="Education Loan">Education Loan</option>
+            <option value="Vehicle Loan">Vehicle Loan</option>
+            <option value="Mortgage Loan">Mortgage Loan</option>
         </select>
     </label>
     <br>

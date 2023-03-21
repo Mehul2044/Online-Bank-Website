@@ -275,6 +275,19 @@ app.post("/contact_us", function (req, res) {
     }
 });
 
+app.post("/main/loan/apply_loan", function (req, res) {
+    let loan_amount = req.body.amount;
+    let loan_type = req.body.loan_type;
+    let reason = req.body.reason;
+    db.run("insert into loan values(?, ?, ?, ?);", [account_number, loan_amount, loan_type, reason], err => {
+        if (err) {
+            console.log(err.message);
+        }else {
+            res.redirect("/main");
+        }
+    });
+});
+
 app.listen(port, function () {
     console.log("Server is running on port " + port + ".");
 });

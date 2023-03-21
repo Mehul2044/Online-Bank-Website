@@ -73,4 +73,20 @@ exports.createTables = function (db) {
 
         }
     });
+
+    db.run("create table if not exists loan\n" +
+        "(\n" +
+        "    acc_no      integer      not null\n" +
+        "        constraint loan_accounts_account_number_fk\n" +
+        "            references accounts,\n" +
+        "    loan_amount double       not null,\n" +
+        "    loan_type   varchar(20)  not null,\n" +
+        "    reason      varchar(100) not null\n" +
+        ");", err => {
+        if (err) {
+            console.log(err.message);
+        } else {
+
+        }
+    });
 }
