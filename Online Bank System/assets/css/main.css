@@ -1,0 +1,47 @@
+.info {
+    margin-top: 6rem;
+    margin-bottom: 1rem;
+}
+
+.transaction-table {
+    overflow-y: auto;
+    height: 10rem;
+}
+
+.transaction-table thead th {
+    position: sticky;
+    top: 0;
+}
+
+.info img {
+    float: right;
+    margin-right: 33%;
+}
+
+.info-text {
+    margin-left: 20%;
+    margin-top: 4%;
+}
+
+.balance, .transaction-history {
+    margin: auto;
+}
+
+.separator {
+    max-width: 85%;
+    height: 1.5rem;
+    margin: 1.5rem 7.5%;
+    background-color: lightgray;
+}
+
+.balance-table {
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.transaction-table {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
