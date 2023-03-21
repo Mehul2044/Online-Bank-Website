@@ -65,9 +65,17 @@ app.get("/main/transfer", function (req, res) {
     }
 });
 
+app.get("/main/view_profile", function (req, res) {
+    if (isLogged) {
+        res.render("view_profile", {projectName: projectName, fName: fName, lName: lastName, eMail: eMail});
+    } else {
+        res.redirect("/login");
+    }
+});
+
 app.get("/main/update_profile", function (req, res) {
     if (isLogged) {
-        res.render("update_profile", {projectName: projectName, fName: fName});
+        res.render("update_profile", {projectName: projectName, fName: fName, lName: lastName, eMail: eMail});
     } else {
         res.redirect("/login");
     }
@@ -84,7 +92,7 @@ app.get("/main/delete_account", function (req, res) {
 app.get("/main/logout", function (req, res) {
     if (isLogged) {
 
-    }else   {
+    } else {
         res.redirect("/login");
     }
 });

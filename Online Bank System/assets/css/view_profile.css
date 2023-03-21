@@ -1,0 +1,14 @@
+.section {
+    text-transform: capitalize;
+    min-width: 300px;
+    min-height:300px;
+    padding: 60px 150px;
+    background-color: #9cc2f0;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    margin: 6rem auto 2.5rem;
+}
+
+.section div{
+    text-align: center;
+}

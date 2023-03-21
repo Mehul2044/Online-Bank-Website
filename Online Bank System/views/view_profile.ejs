@@ -1,0 +1,29 @@
+<%- include("partials/header") %>
+<link rel="stylesheet" href="/css/view_profile.css">
+<title><%= projectName %></title>
+</head>
+
+<body>
+
+<%- include("partials/nav_after_login") %>
+
+<div class="section">
+    <div>
+        <h2>Personal Profile</h2>
+        <br>
+        <img style="margin-left:0;" src="/images/profile_image.jpeg" width="200" height="200"/>
+    </div>
+    <br>
+    <pre>-----------------------------------------</pre>
+    <pre>name               :  <%= fName %> <%= lName %></pre>
+    <pre>Email-id           :  <span style="text-transform: lowercase"><%= eMail %></span></pre>
+    <pre>phone number       :  98xxxxxxx9</pre>
+    <pre>Address            :  Lorem ipsum dolor sit amet.</pre>
+    <pre>-----------------------------------------</pre>
+    <div><button class="btn btn-primary"><a style="color: white; text-decoration: none;" href="/main/update_profile">Edit Profile</a></button></div>
+</div>
+
+<%- include("partials/footer") %>
+
+</body>
+</html>
