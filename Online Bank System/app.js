@@ -81,6 +81,14 @@ app.get("/main/delete_account", function (req, res) {
     }
 });
 
+app.get("/main/logout", function (req, res) {
+    if (isLogged) {
+
+    }else   {
+        res.redirect("/login");
+    }
+});
+
 app.post("/login", async (req, res) => {
     account_number = req.body.account_number;
     let password = req.body.password;
@@ -136,17 +144,17 @@ app.post("/registration", async (req, res) => {
                 console.log(err);
             } else {
                 isLogged = true;
-                    db.get("select * from accounts where rowid = last_insert_rowid();", (err, row) => {
-                        if (err) {
-                            console.log(err);
-                        } else {
-                            fName = row.fname;
-                            eMail = row.email;
-                            account_number = row.account_number;
-                            res.redirect("/main");
-                        }
-                    });
-                }
+                db.get("select * from accounts where rowid = last_insert_rowid();", (err, row) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        fName = row.fname;
+                        eMail = row.email;
+                        account_number = row.account_number;
+                        res.redirect("/main");
+                    }
+                });
+            }
         });
     }
 });

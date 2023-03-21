@@ -32,4 +32,45 @@ exports.createTables = function (db) {
 
         }
     });
+
+    db.run("create table if not exists balance\n" +
+        "(\n" +
+        "    acc_no  integer not null\n" +
+        "        constraint balance_accounts_account_number_fk\n" +
+        "            references accounts,\n" +
+        "    balance double  not null\n" +
+        ");,", err => {
+        if (err) {
+            console.log(err.message);
+        } else {
+        }
+    });
+
+    db.run("create table if not exists queries\n" +
+        "(\n" +
+        "    name    varchar(30)  not null,\n" +
+        "    phone   long integer not null,\n" +
+        "    acc_no  integer,\n" +
+        "    title   varchar(50)  not null,\n" +
+        "    message varchar(200) not null\n" +
+        ");", err => {
+        if (err) {
+            console.log(err.message);
+        } else {
+
+        }
+    });
+
+    db.run("create table if not exists transactions\n" +
+        "(\n" +
+        "    sender_acc_no integer     not null,\n" +
+        "    amount        double      not null,\n" +
+        "    recipient     varchar(30) not null\n" +
+        ");\n", err => {
+        if (err) {
+            console.log(err.message);
+        } else {
+
+        }
+    });
 }

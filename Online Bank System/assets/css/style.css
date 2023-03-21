@@ -3,18 +3,19 @@
     background-color: #003366;
 }
 
-.navbar button {
+.toggle-button {
     background-color: rgba(255, 255, 255, 0.7);
     border-color: transparent;
 }
 
 .navbar a:hover {
-    color: #CCCCCC;
+    color: lightgray;
 }
 
 .navbar a {
     text-transform: capitalize;
     color: white;
+    text-decoration: none;
 }
 
 .navbar .offcanvas {
@@ -30,8 +31,10 @@
 }
 
 button.navbar-toggler:focus {
-    outline: none; !important;
-    border: none; !important;
+    outline: none;
+!important;
+    border: none;
+!important;
     box-shadow: none !important;
 }
 
@@ -63,6 +66,17 @@ body {
     display: flex;
     flex-direction: column;
     background-color: #f2f7fd;
+}
+
+.navbar .logout{
+    color: black;
+    opacity: 1;
+    background-color: white;
+    border: none;
+}
+
+.navbar .logout:hover{
+    background-color: red;
 }
 
 .take-space-for-footer {
