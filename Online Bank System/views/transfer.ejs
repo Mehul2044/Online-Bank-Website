@@ -14,7 +14,7 @@
             <p class="line"></p>
             <p class="p2">No hassle and completely secure online transfer service.</p>
         </div>
-        <form>
+        <form method="post"  action="/main/transfer">
             <div class="d-flex flex-column align-items-center">
                 <p class="fs-4 fw-bold m-0 mt-4">How much do you want to transfer?</p> <span class="text-muted"></span>
                 <span class="line my-3"></span>
@@ -22,11 +22,11 @@
             <div class="row p-0">
                 <div class="col-12 p-0 px-4"><span class="text-uppercase text-muted">amount you want to transfer</span>
                 </div>
-                <div class="col-12 p-0 px-4 form-spacing"><input type="text" id="amount" aria-label=""
+                <div class="col-12 p-0 px-4 form-spacing"><input type="text" name="amount" id="amount" aria-label=""
                                                                  class="d-flex align-items-center my-2"
                                                                  placeholder="In INR"></div>
                 <div class="col-12 p-0 px-4"><span class="text-uppercase text-muted">Enter to A/C No.</span></div>
-                <div class="col-12 p-0 px-4 form-spacing"><input type="text" id="accountNumber" aria-label=""
+                <div class="col-12 p-0 px-4 form-spacing"><input type="text" name="recipient_acc_no" id="accountNumber" aria-label=""
                                                                  class="d-flex align-items-center my-2"
                                                                  placeholder="A/C No">
                 </div>

@@ -176,6 +176,9 @@ app.post("/registration", async (req, res) => {
     }
 });
 
+app.post("/main/transfer", function (req, res) {
+});
+
 app.post("/main/delete_account", function (req, res) {
     db.run("insert into delete_account_request values(?, ?, ?);", [account_number, req.body.reason, req.body.aadhar], (err) => {
         if (err) {

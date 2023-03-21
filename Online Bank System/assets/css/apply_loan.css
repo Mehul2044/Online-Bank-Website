@@ -1,0 +1,37 @@
+form {
+    min-width: 500px;
+    min-height: 300px;
+    padding: 20px;
+    background-color: #9cc2f0;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    float: left;
+    margin: 15rem auto;
+}
+
+label {
+    display: block;
+    float: left;
+    width: 200px;
+    color: rgb(8, 8, 8);
+}
+
+label, input {
+    display: block;
+    margin-bottom: 20px;
+}
+
+input[type="submit"] {
+    margin-left: 7.5rem;
+    width: 12rem;
+    background-color: #0053f9;
+    color: rgb(255, 223, 223);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: navy;
+}

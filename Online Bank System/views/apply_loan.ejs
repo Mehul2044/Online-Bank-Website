@@ -7,6 +7,28 @@
 
 <%- include("partials/nav_after_login") %>
 
+<form action="/main/loan/apply_loan" method="post">
+    <label for="dob">Date of Birth:</label>
+    <input type="datetime-local" id="dob" name="dob" required>
+    <label for="amount">Amount:</label>
+    <input type="text" id="amount" name="amount" required>
+    <label for="radio">Loan Type:</label>
+    <label>
+        <select required>
+            <option id="loantype">
+            <option value="l1">Home Loan</option>
+            <option value="l2">Personal Loan</option>
+            <option value="l3">Education Loan</option>
+            <option value="l4">Vehicle Loan</option>
+            <option value="l5">Mortgage Loan</option>
+        </select>
+    </label>
+    <br>
+    <label for="reason">Reason for Loan:</label>
+    <input type="textarea" id="reason" name="reason" required>
+    <input type="submit" value="Save">
+</form>
+
 <%- include("partials/footer") %>
 
 </body>
