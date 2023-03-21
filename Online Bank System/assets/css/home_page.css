@@ -6,3 +6,20 @@ body {
     background-attachment: fixed;
     background-size: 100% 100%;
 }
+
+h1{
+    color: white;
+    margin-top: 15rem;
+    margin-left: 5rem;
+    font-size: 6rem;
+    width: 35rem;
+}
+
+p{
+    margin-left: 5rem;
+    color: white;
+    margin-top: 5rem;
+    width: 45rem;
+    line-height: 2;
+    font-size: 1.5rem;
+}

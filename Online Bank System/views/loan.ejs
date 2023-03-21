@@ -1,0 +1,142 @@
+<%- include("partials/header") %>
+<title><%= projectName %></title>
+<link rel="stylesheet" href="/css/loan.css">
+</head>
+
+<body>
+
+<%- include("partials/nav_after_login") %>
+
+<div class="container top-container">
+    <div>
+        <img src="https://life.futuregenerali.in/media/2rzbkdf4/personal-loan.webp" class="top-image"
+             style="width: 50rem">
+    </div>
+    <div>
+        <p>
+            We may not always have the money we require to do certain things or to buy certain things. In such
+            situations, individuals and businesses or institutions go for the option of borrowing money from lenders.
+            Our Bank provides many types of secured loans and unsecured loans.
+        </p>
+        <br>
+        <div class="navigation-links">
+            <h5>Check our SECURED LOAN SCHEMES here</h5>
+            <h2><a href="#one">SECURED LOANS</a></h2><br>
+            <h5>Check our UNSECURED LOAN SCHEMES here</h5>
+            <h2><a href="#two">UNSECURED LOANS</a></h2>
+        </div>
+        <button class="btn btn-primary btn-lg"><a href="/main/loan/apply_loan" style="color: white; text-decoration: none">Apply Now!</a>
+        </button>
+    </div>
+</div>
+
+<div class="container container-middle" id="one">
+    <div>
+        <img src="https://www.bankofbaroda.in/-/media/project/bob/countrywebsites/india/blogs/loansborrowings/images/how-are-secured-loans-different-from-unsecured-loans.jpg"
+             width="45%">
+    </div>
+    <div>
+        <h1>SECURED LOANS</h1>
+        <h5>We provide the following schemes</h5>
+        <h3>MORTGAGE LOAN ,HOME LOAN, VEHICLE LOAN</h3>
+        <p>
+            Our Bank gives Secured Loans only if the customer has collaterals for the loan. We need a thorough overview
+            of details of the assets that customer wants to put as collateral. After checking the collateral assets we
+            will grant the best loan plans ever. The minimum interest rates and our terms and policies are very customer
+            friendly.
+        </p>
+    </div>
+</div>
+
+<div class="container container-table">
+    <h4>Secured loan interest rate:</h4>
+    <table class="table">
+        <thead>
+        <tr class="table-primary">
+            <th scope="col">#</th>
+            <th scope="col">interest Rate</th>
+            <th scope="col">Limit in Rupees</th>
+            <th scope="col">Limit In Rupees</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>Home Loan</td>
+            <td>8.5% p.a.</td>
+            <td>Upto 75 lakhs</td>
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>Vehicle Loan</td>
+            <td>8.65% to 9.45% p.a.</td>
+            <td>Upto 25 lakhs</td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>Mortgage Loan</td>
+            <td>8.75% p.a.</td>
+            <td>Upto 15 lakhs</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="container container-end" id="two">
+    <div id>
+        <img src="https://www.indusind.com/iblogs/wp-content/uploads/blog-img.png"
+             width="50%">
+    </div>
+    <div>
+        <h1>UNSECURED LOANS</h1>
+        <h5>We provide the following schemes</h5>
+        <h3>PERSONAL LOAN, EDUCATIONAL LOAN, BUSSINESS/CREDIT LOAN</h3>
+        <p>
+            Our Bank gives Unsecured Loans based on the creditworthiness of the customer. We do not require any
+            collaterals for the loan amount. Based on the credit scores and Credit worth of the Customer best loan plans
+            will be suggested. The minimum interest rates and our terms and policies are very customer friendly.
+        </p>
+    </div>
+</div>
+
+<div class="container container-table">
+    <h4>Unsecured loan interest rate:</h4>
+    <table class="table">
+        <thead>
+        <tr class="table-primary">
+            <th scope="col">#</th>
+            <th scope="col">interest Rate</th>
+            <th scope="col">Limit in Rupees</th>
+            <th scope="col">Limit In Rupees</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>Personal Loan</td>
+            <td>10.5% - 21.00% p.a.</td>
+            <td>Upto 15 lakhs</td>
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>Education Loan</td>
+            <td>11.5% p.a.</td>
+            <td>Upto 7.5 lakhs</td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>Business/Credit Card Loan</td>
+            <td>40.8% p.a.</td>
+            <td>Flexible</td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="apply-now">
+        <button class="btn btn-primary btn-lg"><a href="/main/loan/apply_loan" style="color: white; text-decoration: none">Apply Now for Loan!</a>
+        </button>
+    </div>
+</div>
+
+<%- include("partials/footer") %>
+
+</body>

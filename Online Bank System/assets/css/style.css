@@ -16,6 +16,7 @@
     text-transform: capitalize;
     color: white;
     text-decoration: none;
+    font-size: 1.5rem;
 }
 
 .navbar .offcanvas {
@@ -24,6 +25,7 @@
 
 .navbar .offcanvas-title {
     text-transform: uppercase;
+    font-weight: bold;
 }
 
 .navbar .offcanvas a {
@@ -40,6 +42,10 @@ button.navbar-toggler:focus {
 
 .navbar .offcanvas a:hover {
     color: grey;
+}
+
+.navbar .offcanvas .offcanvas-title a:hover {
+    color: darkgoldenrod;
 }
 
 footer {
@@ -68,14 +74,14 @@ body {
     background-color: #f2f7fd;
 }
 
-.navbar .logout{
+.navbar .logout {
     color: black;
     opacity: 1;
     background-color: white;
     border: none;
 }
 
-.navbar .logout:hover{
+.navbar .logout:hover {
     background-color: red;
 }
 

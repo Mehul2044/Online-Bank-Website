@@ -81,17 +81,25 @@ app.get("/main/update_profile", function (req, res) {
     }
 });
 
-app.get("/main/delete_account", function (req, res) {
+app.get("/main/loan", function (req, res) {
     if (isLogged) {
-        res.render("delete_account", {projectName: projectName, fName: fName});
+        res.render("loan", {projectName: projectName, fName: fName});
     } else {
         res.redirect("/login");
     }
 });
 
-app.get("/main/logout", function (req, res) {
+app.get("/main/loan/apply_loan", function (req, res) {
     if (isLogged) {
+        res.render("apply_loan", {projectName: projectName, fName: fName});
+    } else {
+        res.redirect("/login");
+    }
+});
 
+app.get("/main/delete_account", function (req, res) {
+    if (isLogged) {
+        res.render("delete_account", {projectName: projectName, fName: fName});
     } else {
         res.redirect("/login");
     }
@@ -177,6 +185,10 @@ app.post("/main/delete_account", function (req, res) {
             res.redirect("/main");
         }
     });
+});
+
+app.post("/main/login/apply_loan", function (req, res) {
+
 });
 
 app.listen(port, function () {

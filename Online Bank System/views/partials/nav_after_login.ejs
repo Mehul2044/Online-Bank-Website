@@ -5,13 +5,13 @@
                 aria-controls="offcanvasNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="/main"><img src="/images/logo.svg" style="width: 7rem;"></a>
+        <a class="navbar-brand" href="/main"><img src="/images/logo.svg" style="width: 10rem;"></a>
         <span class="me-2"><button class="btn logout opacity-100" data-bs-target="#exampleModal" data-bs-toggle="modal"><a
                         style="color: black" href="#">Log Out</a></button></span>
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar"
              aria-labelledby="offcanvasNavbarLabel">
             <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Welcome <%= fName %>!</h5>
+                <h5 class="offcanvas-title" id="offcanvasNavbarLabel"><a href="/main/view_profile">Welcome <%= fName %>!</a></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
@@ -32,7 +32,7 @@
                         <a class="nav-link" href="/main/delete_account">Delete account</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Loan</a>
+                        <a class="nav-link" href="/main/loan">Loan</a>
                     </li>
                 </ul>
             </div>

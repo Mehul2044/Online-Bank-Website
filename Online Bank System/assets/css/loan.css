@@ -1,0 +1,50 @@
+.top-container {
+    margin-top: 7rem;
+    text-align: center;
+    margin-bottom: 5rem;
+}
+
+.navigation-links {
+    text-align: left;
+}
+
+.top-image {
+    margin-bottom: 2rem;
+}
+
+.top-container p {
+    text-align: left;
+}
+
+.container-middle {
+    padding-top: 7rem;
+    margin-bottom: 5rem;
+}
+
+.container-middle img {
+    float: left;
+    margin-right: 2rem;
+}
+
+.container-table {
+    margin-bottom: 5rem;
+}
+
+.container-end {
+    padding-top: 7rem;
+    margin-bottom: 5rem;
+}
+
+.container-end img {
+    float: right;
+    margin-left: 2rem;
+}
+
+.container-end p {
+    width: 45%;
+}
+
+.apply-now{
+    margin-top: 5rem;
+    text-align: center;
+}

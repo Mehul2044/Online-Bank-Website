@@ -51,6 +51,7 @@
 }
 
 .container form input {
+    padding: 10px;
     min-width: 100%;
 }
 
