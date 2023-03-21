@@ -176,7 +176,42 @@ app.post("/registration", async (req, res) => {
     }
 });
 
-app.post("/main/transfer", function (req, res) {
+app.post("/main/transfer", async (req, res) => {
+    let sender_account = account_number;
+    console.log(req.body);
+    let recipient_acc_no = req.body.recipient_acc_no;
+    let amount = Number(req.body.amount);
+    let sender_balance = 0;
+    await db.get("select * from balance where acc_no = ?", [sender_account], (err, row) => {
+        if (err){
+            console.log(err.message);
+        }else {
+            sender_balance = row.balance;
+            console.log(sender_balance);
+            if (sender_balance < amount){
+                res.send("Balance insufficient!");
+            }else {
+                db.run("update balance set balance = balance + ? where acc_no = ?", [amount, recipient_acc_no], err => {
+                   if (err){
+                       console.log(err.message);
+                   }
+                });
+                db.run("update balance set balance = balance - ? where acc_no = ?", [amount, sender_account], err => {
+                    if (err){
+                        console.log(err.message);
+                    }
+                });
+                db.run("insert into transactions values(?, ?, ?);", [sender_account, amount, recipient_acc_no], err => {
+                    if (err){
+                        console.log(err);
+                    }else {
+                        console.log("Transaction Successful");
+                        res.redirect("/main");
+                    }
+                });
+            }
+        }
+    });
 });
 
 app.post("/main/delete_account", function (req, res) {
