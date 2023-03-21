@@ -35,32 +35,32 @@
             <div class="contact-left">
                 <h2>Send Your Queries</h2>
                 <br>
-                <form>
+                <form method="post" action="/contact_us">
                     <div class="input-row">
                         <div class="input-group">
                             <label>Name</label>
-                            <input type="text" placeholder="Your Name">
+                            <input type="text" name="name" placeholder="Your Name">
                         </div>
                         <br>
                         <div class="input-group">
                             <label>Phone number</label>
-                            <input type="number" placeholder="10 digit phone Number"><i class="fa fa-phone" aria-hidden="true"></i>
+                            <input type="number" name="ph_no" placeholder="10 digit phone Number"><i class="fa fa-phone" aria-hidden="true"></i>
                         </div>
                         <br>
                         <div class="input-group">
                             <label>Account number</label>
-                            <input type="number" placeholder="A/C No.">
+                            <input type="number" name="acc_no" placeholder="A/C No.">
                         </div>
                         <br>
                         <div class="input-group">
                             <label>Querie Title</label>
-                            <input type="text" placeholder="Enter your query here">
+                            <input type="text" name="title" placeholder="Enter your query here">
                         </div>
                         <br>
                     </div>
                     <br>
                     <label id="queries_label">Queries</label>
-                    <textarea id="box_text" rows="10" placeholder="Your Message"></textarea>
+                    <textarea id="box_text" rows="10" name="message" placeholder="Your Message"></textarea>
                     <br>
                     <button type="submit">Send</button>
                 </form>

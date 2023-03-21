@@ -176,6 +176,31 @@ app.post("/registration", async (req, res) => {
     }
 });
 
+app.post("/main/update_profile", function (req, res) {
+    let first = req.body.firstName;
+    let last = req.body.lastName;
+    let mail = req.body.email;
+    if (!first) {
+        first = fName;
+    }
+    if (!last) {
+        last = lastName;
+    }
+    if (!mail) {
+        mail = eMail;
+    }
+    db.run("update accounts set fname = ?, lname = ?, email = ? where account_number = ?", [first, last, mail, account_number], err => {
+        if (err) {
+            console.log(err);
+        } else {
+            fName = first;
+            lastName = last;
+            eMail = mail;
+            res.redirect("/main");
+        }
+    });
+});
+
 app.post("/main/transfer", async (req, res) => {
     let sender_account = account_number;
     console.log(req.body);
@@ -183,28 +208,28 @@ app.post("/main/transfer", async (req, res) => {
     let amount = Number(req.body.amount);
     let sender_balance = 0;
     await db.get("select * from balance where acc_no = ?", [sender_account], (err, row) => {
-        if (err){
+        if (err) {
             console.log(err.message);
-        }else {
+        } else {
             sender_balance = row.balance;
             console.log(sender_balance);
-            if (sender_balance < amount){
+            if (sender_balance < amount) {
                 res.send("Balance insufficient!");
-            }else {
+            } else {
                 db.run("update balance set balance = balance + ? where acc_no = ?", [amount, recipient_acc_no], err => {
-                   if (err){
-                       console.log(err.message);
-                   }
+                    if (err) {
+                        console.log(err.message);
+                    }
                 });
                 db.run("update balance set balance = balance - ? where acc_no = ?", [amount, sender_account], err => {
-                    if (err){
+                    if (err) {
                         console.log(err.message);
                     }
                 });
                 db.run("insert into transactions values(?, ?, ?);", [sender_account, amount, recipient_acc_no], err => {
-                    if (err){
+                    if (err) {
                         console.log(err);
-                    }else {
+                    } else {
                         console.log("Transaction Successful");
                         res.redirect("/main");
                     }
@@ -225,8 +250,29 @@ app.post("/main/delete_account", function (req, res) {
     });
 });
 
-app.post("/main/login/apply_loan", function (req, res) {
-
+app.post("/contact_us", function (req, res) {
+    let message = req.body.message;
+    let name = req.body.name;
+    let ph_no = req.body.ph_no;
+    let acc_no = req.body.acc_no;
+    let title = req.body.title;
+    if (!acc_no) {
+        db.run("insert into queries (name, phone, title, message) values(?, ?, ?, ?);", [name, ph_no, title, message], err => {
+            if (err) {
+                console.log(err.message);
+            } else {
+                res.redirect("/main");
+            }
+        });
+    } else {
+        db.run("insert into queries values(?, ?, ?, ?, ?);", [name, ph_no, acc_no, title, message], err => {
+            if (err) {
+                console.log(err.message);
+            } else {
+                res.redirect("/main");
+            }
+        });
+    }
 });
 
 app.listen(port, function () {
