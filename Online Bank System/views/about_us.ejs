@@ -18,7 +18,11 @@
                 About Us
             </div>
             <div class="content">
-                <h3>Login to avail Internet Banking Facilities Now</h3>
+                <% if (isLogged) { %>
+                    <h3>Avail Our Internet Banking Facilities Now</h3>
+                <% } else { %>
+                    <h3>Login to avail Internet Banking Facilities Now</h3>
+                <% } %>
                 <p>
                     Welcome to our bank, where we are committed to providing exceptional financial services to
                     individuals, businesses, and communities. Our bank is built on a

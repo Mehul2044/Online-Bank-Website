@@ -1,60 +1,12 @@
 <%- include("partials/header") %>
 <title><%= projectName %></title>
 <link rel="stylesheet" href="/css/registration.css">
+<script src="/js/registration_validate.js" defer></script>
 </head>
 
 <body>
 
 <%-include("partials/nav_before_login") %>
-
-<!--<section class="text-center text-lg-start">-->
-
-<!--    <div class="container py-4">-->
-<!--        <div class="row g-0 align-items-center">-->
-<!--            <div class="mx-auto col-lg-6 mb-5 mb-lg-0">-->
-<!--                <div class="card cascading-right">-->
-
-<!--                    <div class="mx-auto card-body p-5 shadow-5 text-center">-->
-<!--                        <h2 class="fw-bold mb-5">Sign up now</h2>-->
-<!--                        <form method="post" action="/registration">-->
-<!--                            <div class="row">-->
-<!--                                <div class="col-md-6 mb-4">-->
-<!--                                    <div class="form-outline">-->
-<!--                                        <input type="text" name="firstName" id="form3Example1" class="form-control"/>-->
-<!--                                        <label class="form-label" for="form3Example1">First name</label>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                <div class="col-md-6 mb-4">-->
-<!--                                    <div class="form-outline">-->
-<!--                                        <input type="text" name="lastName" id="form3Example2" class="form-control"/>-->
-<!--                                        <label class="form-label" for="form3Example2">Last name</label>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-
-<!--                            &lt;!&ndash; Email input &ndash;&gt;-->
-<!--                            <div class="form-outline mb-4">-->
-<!--                                <input type="email" name="eMail" id="form3Example3" class="form-control"/>-->
-<!--                                <label class="form-label" for="form3Example3">Email address</label>-->
-<!--                            </div>-->
-
-<!--                            &lt;!&ndash; Password input &ndash;&gt;-->
-<!--                            <div class="form-outline mb-4">-->
-<!--                                <input type="password" name="password" id="form3Example4" class="form-control"/>-->
-<!--                                <label class="form-label" for="form3Example4">Password</label>-->
-<!--                            </div>-->
-<!--                            <button type="submit" class="btn btn-primary btn-block mb-4">-->
-<!--                                Sign up-->
-<!--                            </button>-->
-<!--                        </form>-->
-<!--                    </div>-->
-
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--</section>-->
 
 <form action="/registration" method="post">
     <label for="fName">First Name:</label>
