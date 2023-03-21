@@ -12,9 +12,11 @@ const db = relation.connect();
 relation.createTables(db);
 
 let isLogged = false;
-let userName;
 
 let account_number;
+let fName;
+let lastName;
+let eMail;
 
 app.use(bodyParse.urlencoded({extended: true}));
 app.use(express.static("assets"));
@@ -36,28 +38,28 @@ app.get("/registration", function (req, res) {
 });
 
 app.get("/about", function (req, res) {
-    res.render("about_us", {projectName: projectName, isLogged: isLogged, userName: userName});
+    res.render("about_us", {projectName: projectName, isLogged: isLogged, fName: fName});
 });
 
 app.get("/terms_conditions", function (req, res) {
-    res.render("terms_conditions", {projectName: projectName, isLogged: isLogged, userName: userName, req: req});
+    res.render("terms_conditions", {projectName: projectName, isLogged: isLogged, fName: fName, req: req});
 });
 
 app.get("/contact_us", function (req, res) {
-    res.render("contact_us", {projectName: projectName, isLogged: isLogged, userName: userName});
+    res.render("contact_us", {projectName: projectName, isLogged: isLogged, fName: fName});
 });
 
 app.get("/main", function (req, res) {
     if (isLogged) {
-        res.render("main", {projectName: projectName, userName: userName});
+        res.render("main", {projectName: projectName, fName: fName});
     } else {
-        res.redirect("/login")
+        res.redirect("/login");
     }
 });
 
 app.get("/main/transfer", function (req, res) {
     if (isLogged) {
-        res.render("transfer", {projectName: projectName, userName: userName});
+        res.render("transfer", {projectName: projectName, fName: fName});
     } else {
         res.redirect("/login");
     }
@@ -65,7 +67,7 @@ app.get("/main/transfer", function (req, res) {
 
 app.get("/main/update_profile", function (req, res) {
     if (isLogged) {
-        res.render("update_profile", {projectName: projectName, userName: userName});
+        res.render("update_profile", {projectName: projectName, fName: fName});
     } else {
         res.redirect("/login");
     }
@@ -73,7 +75,7 @@ app.get("/main/update_profile", function (req, res) {
 
 app.get("/main/delete_account", function (req, res) {
     if (isLogged) {
-        res.render("delete_account", {projectName: projectName, userName: userName});
+        res.render("delete_account", {projectName: projectName, fName: fName});
     } else {
         res.redirect("/login");
     }
@@ -82,7 +84,7 @@ app.get("/main/delete_account", function (req, res) {
 app.post("/login", async (req, res) => {
     account_number = req.body.account_number;
     let password = req.body.password;
-    await db.get("SELECT password, fname FROM accounts WHERE account_number = ?", [account_number], (err, row) => {
+    await db.get("SELECT password, fname, email FROM accounts WHERE account_number = ?", [account_number], (err, row) => {
         if (err) {
             console.error(err.message);
             return;
@@ -92,7 +94,8 @@ app.post("/login", async (req, res) => {
             password_check = row.password
             if (password_check === password) {
                 isLogged = true;
-                userName = row.fname;
+                fName = row.fname;
+                eMail = row.email;
                 res.redirect("/main")
             } else {
                 res.send("Details do not match.");
@@ -104,9 +107,9 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/registration", async (req, res) => {
-    let firstName = req.body.firstName
-    let lastName = req.body.lastName
-    let eMail = req.body.eMail
+    fName = req.body.firstName
+    lastName = req.body.lastName
+    eMail = req.body.eMail
     let password = req.body.password
     let exist;
 
@@ -128,26 +131,34 @@ app.post("/registration", async (req, res) => {
         res.send("Account already exists.");
     } else if (!exist) {
         db.run("insert into accounts (fname, lname, email, password) values " +
-            "('" + firstName + "','" + lastName + "','" + eMail + "','" + password + "')", err => {
+            "('" + fName + "','" + lastName + "','" + eMail + "','" + password + "')", async err => {
             if (err) {
                 console.log(err);
             } else {
                 isLogged = true;
-                res.redirect("/main");
-            }
+                    db.get("select * from accounts where rowid = last_insert_rowid();", (err, row) => {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            fName = row.fname;
+                            eMail = row.email;
+                            account_number = row.account_number;
+                            res.redirect("/main");
+                        }
+                    });
+                }
         });
-        userName = firstName;
     }
 });
 
 app.post("/main/delete_account", function (req, res) {
     db.run("insert into delete_account_request values(?, ?, ?);", [account_number, req.body.reason, req.body.aadhar], (err) => {
-       if (err){
-           console.log(err.message);
-       }else {
-           console.log("Deletion request sent.");
-           res.redirect("/main");
-       }
+        if (err) {
+            console.log(err.message);
+        } else {
+            console.log("Deletion request sent.");
+            res.redirect("/main");
+        }
     });
 });
 

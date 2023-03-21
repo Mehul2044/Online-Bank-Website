@@ -23,11 +23,16 @@
 
 .navbar .offcanvas-title {
     text-transform: uppercase;
-    font-weight: bold;
 }
 
 .navbar .offcanvas a {
     color: black;
+}
+
+button.navbar-toggler:focus {
+    outline: none; !important;
+    border: none; !important;
+    box-shadow: none !important;
 }
 
 .navbar .offcanvas a:hover {
@@ -60,6 +65,6 @@ body {
     background-color: #f2f7fd;
 }
 
-.take-space-for-footer{
+.take-space-for-footer {
     flex: 1;
 }
