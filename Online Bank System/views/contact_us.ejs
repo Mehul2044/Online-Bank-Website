@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="/css/contact_us.css">
 <title><%= projectName %></title>
 <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+<script src="/js/contact_validate.js" defer></script>
 </head>
 
 <body>
@@ -39,17 +40,17 @@
                     <div class="input-row">
                         <div class="input-group">
                             <label>Name</label>
-                            <input type="text" name="name" placeholder="Your Name">
+                            <input type="text" name="name" placeholder="Your Name" id="name">
                         </div>
                         <br>
                         <div class="input-group">
                             <label>Phone number</label>
-                            <input type="number" name="ph_no" placeholder="10 digit phone Number"><i class="fa fa-phone" aria-hidden="true"></i>
+                            <input type="text" name="ph_no" placeholder="10 digit phone Number" id="ph_no"><i class="fa fa-phone" aria-hidden="true"></i>
                         </div>
                         <br>
                         <div class="input-group">
                             <label>Account number</label>
-                            <input type="number" name="acc_no" placeholder="A/C No.">
+                            <input type="text" name="acc_no" placeholder="A/C No." id="acc_no">
                         </div>
                         <br>
                         <div class="input-group">
