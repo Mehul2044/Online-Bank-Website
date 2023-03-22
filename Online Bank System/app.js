@@ -55,7 +55,43 @@ app.get("/contact_us", function (req, res) {
 app.get("/main", function (req, res) {
     if (isLogged) {
         let dateString = date.getDate();
-        res.render("main", {projectName: projectName, fName: fName, date: dateString});
+        let balance = 0;
+        db.get("select * from balance where acc_no = ?", [account_number], (err, row) => {
+            if (err) {
+                console.log(err);
+            } else {
+                balance = row.balance;
+                db.all("select * from transactions where sender_acc_no = ? or recipient = ?", [account_number, account_number], (err, rows) => {
+                    if (err) {
+                        console.log(err.message);
+                    } else {
+                        let transactions_length = rows.length;
+                        let amount = [];
+                        let to_from = [];
+                        for (let i = 0; i < transactions_length; i++) {
+                            if (account_number === rows[i].sender_acc_no.toString()) {
+                                amount.push("-" + rows[i].amount.toString());
+                                to_from.push(rows[i].recipient.toString());
+                            } else if (account_number === rows[i].recipient) {
+                                amount.push("+" + rows[i].amount.toString());
+                                to_from.push(rows[i].sender_acc_no.toString());
+                            }
+                        }
+                        res.render("main", {
+                            projectName: projectName,
+                            fName: fName,
+                            date: dateString,
+                            lName: lastName,
+                            acc_no: account_number,
+                            balance: balance,
+                            transactions_length: transactions_length,
+                            amount: amount,
+                            to_from: to_from,
+                        });
+                    }
+                });
+            }
+        });
     } else {
         res.redirect("/login");
     }

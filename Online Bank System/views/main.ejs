@@ -11,8 +11,8 @@
 <div class="info">
     <img src="/images/profile_image.jpeg" width="160" height="200">
     <div class="info-text">
-        <pre>Acount Holder Name :  hari</pre>
-        <pre>Account Number     :  08818325689</pre>
+        <pre>Acount Holder Name :  <%= fName %> <%= lName %></pre>
+        <pre>Account Number     :  <%= acc_no %></pre>
         <br><br>
         <pre>Today's Date       :  <%= date %></pre>
     </div>
@@ -33,9 +33,9 @@
             </thead>
             <tbody>
             <tr>
-                <td>Mehul</td>
-                <td>21</td>
-                <td>5000</td>
+                <td><%= fName %> <%= lName %></td>
+                <td><%= acc_no %></td>
+                <td><%= balance %></td>
             </tr>
             </tbody>
         </table>
@@ -50,36 +50,19 @@
         <thead>
         <tr class="table-primary">
             <th scope="col">#</th>
-            <th scope="col">Name</th>
             <th scope="col">Amount</th>
             <th scope="col">To/From</th>
         </tr>
         </thead>
         <tbody>
+        <% transactions_length %>
+        <% for(let i = 0; i<transactions_length; i++) { %>
         <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
+            <th scope="row"><%= i + 1 %></th>
+            <td><%= amount[i] %></td>
+            <td><%= to_from[i] %></td>
         </tr>
-        <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td>Larry the Bird</td>
-            <td>+1000</td>
-            <td>@twitter</td>
-        </tr>
-        <tr>
-            <th scope="row">4</th>
-            <td>Lorem ipsum.</td>
-            <td>-1000</td>
-            <td>Lorem ipsum dolor.</td>
-        </tr>
+        <% } %>
         </tbody>
     </table>
 </div>
