@@ -14,7 +14,7 @@
         <pre>Acount Holder Name :  <%= fName %> <%= lName %></pre>
         <pre>Account Number     :  <%= acc_no %></pre>
         <br><br>
-        <pre>Today's Date       :  <%= date %></pre>
+        <pre>Today's Date       :  <%= dates %></pre>
     </div>
 </div>
 
@@ -51,7 +51,9 @@
         <tr class="table-primary">
             <th scope="col">#</th>
             <th scope="col">Amount</th>
-            <th scope="col">To/From</th>
+            <th scope="col">Amount Received To/From</th>
+            <th scope="col">Date</th>
+            <th scope="col">Time</th>
         </tr>
         </thead>
         <tbody>
@@ -61,6 +63,8 @@
             <th scope="row"><%= i + 1 %></th>
             <td><%= amount[i] %></td>
             <td><%= to_from[i] %></td>
+            <td><%= date[i] %></td>
+            <td><%= time[i] %></td>
         </tr>
         <% } %>
         </tbody>

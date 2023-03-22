@@ -68,6 +68,8 @@ app.get("/main", function (req, res) {
                         let transactions_length = rows.length;
                         let amount = [];
                         let to_from = [];
+                        let date = [];
+                        let time = [];
                         for (let i = 0; i < transactions_length; i++) {
                             if (account_number === rows[i].sender_acc_no.toString()) {
                                 amount.push("-" + rows[i].amount.toString());
@@ -76,17 +78,21 @@ app.get("/main", function (req, res) {
                                 amount.push("+" + rows[i].amount.toString());
                                 to_from.push(rows[i].sender_acc_no.toString());
                             }
+                            date.push(rows[i].date);
+                            time.push(rows[i].time);
                         }
                         res.render("main", {
                             projectName: projectName,
                             fName: fName,
-                            date: dateString,
+                            dates: dateString,
                             lName: lastName,
                             acc_no: account_number,
                             balance: balance,
                             transactions_length: transactions_length,
                             amount: amount,
                             to_from: to_from,
+                            date: date,
+                            time: time,
                         });
                     }
                 });
@@ -272,7 +278,7 @@ app.post("/main/transfer", async (req, res) => {
                         console.log(err.message);
                     }
                 });
-                db.run("insert into transactions values(?, ?, ?);", [sender_account, amount, recipient_acc_no], err => {
+                db.run("insert into transactions values(?, ?, ?, ?, ?);", [sender_account, amount, recipient_acc_no, new Date().toLocaleString().slice(0, 9).replace('T', ' '), new Date().toLocaleString().slice(11, 19).replace('T', ' ')], err => {
                     if (err) {
                         console.log(err);
                     } else {

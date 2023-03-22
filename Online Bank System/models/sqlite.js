@@ -65,7 +65,9 @@ exports.createTables = function (db) {
         "(\n" +
         "    sender_acc_no integer     not null,\n" +
         "    amount        double      not null,\n" +
-        "    recipient     varchar(30) not null\n" +
+        "    recipient     varchar(30) not null,\n" +
+        "    date          date        not null,\n" +
+        "    time          time        not null\n" +
         ");\n", err => {
         if (err) {
             console.log(err.message);
