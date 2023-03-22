@@ -25,7 +25,8 @@
             <h5>Check our UNSECURED LOAN SCHEMES here</h5>
             <h2><a href="#two">UNSECURED LOANS</a></h2>
         </div>
-        <button class="btn btn-primary btn-lg"><a href="/main/loan/apply_loan" style="color: white; text-decoration: none">Apply Now!</a>
+        <button class="btn btn-primary btn-lg" data-bs-target="#apply_loan" data-bs-toggle="modal"><a href="#"
+                                                  style="color: white; text-decoration: none">Apply Now!</a>
         </button>
     </div>
 </div>
@@ -132,8 +133,90 @@
         </tbody>
     </table>
     <div class="apply-now">
-        <button class="btn btn-primary btn-lg"><a href="/main/loan/apply_loan" style="color: white; text-decoration: none">Apply Now for Loan!</a>
+        <button class="btn btn-primary btn-lg" data-bs-target="#apply_loan" data-bs-toggle="modal"><a href="#"
+                                                                                                      style="color: white; text-decoration: none">Apply
+                Now for Loan!</a>
         </button>
+    </div>
+</div>
+
+<div class="modal fade" id="apply_loan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <style>
+                form {
+                    min-width: 500px;
+                    min-height: 300px;
+                    padding: 20px;
+                    background-color: #9cc2f0;
+                    border-radius: 5px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+                    float: left;
+                }
+
+                label {
+                    display: block;
+                    float: left;
+                    width: 200px;
+                    color: rgb(8, 8, 8);
+                }
+
+                label, input {
+                    display: block;
+                    margin-bottom: 20px;
+                }
+
+                input[type="submit"] {
+                    margin-left: 7.5rem;
+                    width: 12rem;
+                    background-color: #0053f9;
+                    color: rgb(255, 223, 223);
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                }
+
+                input[type="submit"]:hover {
+                    background-color: navy;
+                }
+            </style>
+            <form action="/main/loan/apply_loan" method="post">
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" name="dob" required>
+                <label for="amount">Amount:</label>
+                <input type="text" id="amount" name="amount" required>
+                <label for="radio">Loan Type:</label>
+                <label>
+                    <select required name="loan_type">
+                        <option id="loantype">
+                        <option value="Home Loan">Home Loan</option>
+                        <option value="Personal Loan">Personal Loan</option>
+                        <option value="Education Loan">Education Loan</option>
+                        <option value="Vehicle Loan">Vehicle Loan</option>
+                        <option value="Mortgage Loan">Mortgage Loan</option>
+                    </select>
+                </label>
+                <br>
+                <label for="reason">Reason for Loan:</label>
+                <input type="textarea" id="reason" name="reason" required>
+                <input type="submit" value="Save">
+            </form>
+            <script>
+                const amountInput = document.getElementById("amount");
+
+                const amountRegex = /^\d+(\.\d+)?$/;
+
+                amountInput.addEventListener("input", () => {
+                    if (!amountRegex.test(amountInput.value)) {
+                        amountInput.setCustomValidity("Please enter a valid number.");
+                        amountInput.reportValidity();
+                    } else {
+                        amountInput.setCustomValidity("");
+                    }
+                });
+            </script>
+        </div>
     </div>
 </div>
 

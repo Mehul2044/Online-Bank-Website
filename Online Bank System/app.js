@@ -135,22 +135,6 @@ app.get("/main/loan", function (req, res) {
     }
 });
 
-app.get("/main/loan/apply_loan", function (req, res) {
-    if (isLogged) {
-        res.render("apply_loan", {projectName: projectName, fName: fName});
-    } else {
-        res.redirect("/login");
-    }
-});
-
-app.get("/main/delete_account", function (req, res) {
-    if (isLogged) {
-        res.render("delete_account", {projectName: projectName, fName: fName});
-    } else {
-        res.redirect("/login");
-    }
-});
-
 app.post("/login", async (req, res) => {
     account_number = req.body.account_number;
     let password = req.body.password;
@@ -255,7 +239,6 @@ app.post("/main/update_profile", function (req, res) {
 
 app.post("/main/transfer", async (req, res) => {
     let sender_account = account_number;
-    console.log(req.body);
     let recipient_acc_no = req.body.recipient_acc_no;
     let amount = Number(req.body.amount);
     let sender_balance = 0;
@@ -264,7 +247,6 @@ app.post("/main/transfer", async (req, res) => {
             console.log(err.message);
         } else {
             sender_balance = row.balance;
-            console.log(sender_balance);
             if (sender_balance < amount) {
                 res.send("Balance insufficient!");
             } else {

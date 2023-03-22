@@ -11,7 +11,8 @@
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar"
              aria-labelledby="offcanvasNavbarLabel">
             <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasNavbarLabel"><a href="/main/view_profile">Welcome <%= fName %>!</a></h5>
+                <h5 class="offcanvas-title" id="offcanvasNavbarLabel"><a href="/main/view_profile">Welcome <%= fName %>
+                        !</a></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
@@ -29,16 +30,18 @@
                         <a class="nav-link" href="/main/transfer">Transfer</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/main/delete_account">Delete account</a>
+                        <a class="nav-link" href="/main/loan">Loan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/main/loan">Loan</a>
+                        <a class="nav-link" href="#" data-bs-target="#delete_account" data-bs-toggle="modal">Delete
+                            account Request</a>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
 </nav>
+
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -55,6 +58,86 @@
                             style="color: white; text-decoration: none;" href="/">Log Out</a></button>
                 </span>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete_account" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <style>
+                form {
+                    min-width: 500px;
+                    min-height: 200px;
+                    padding: 20px;
+                    background-color: #9cc2f0;
+                    border-radius: 5px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+                    margin-top: 0;
+                }
+
+                label {
+                    display: block;
+                    float: left;
+                    width: 200px;
+                    color: rgb(8, 8, 8);
+                }
+
+                label, input {
+                    display: block;
+                    margin-bottom: 20px;
+                }
+
+                input {
+                    width: 20rem;
+                }
+
+                input[type="submit"] {
+                    margin-top: 3rem;
+                    margin-left: 7.5rem;
+                    width: 12rem;
+                    background-color: #0053f9;
+                    color: rgb(255, 223, 223);
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                }
+
+                input[type="submit"]:hover {
+                    background-color: navy;
+                }
+            </style>
+            <form method="post" action="/main/delete_account">
+                <label for="aadhar">Aadhaar Number:</label>
+                <input type="tel" name="aadhar" required>
+                <label for="option">Reason:</label>
+                <label>
+                    <select required name="reason">
+                        <option id="reason">
+                        <option value="No use/No need">No use/No need</option>
+                        <option value="Cannot Maintain">Cannot Maintain</option>
+                        <option value="Did not like the service">Did not like the service</option>
+                        <option value="Others/Need not specify">Others/Need not specify</option>
+                    </select>
+                </label>
+                <br>
+                <input type="submit">
+            </form>
+            <script>
+                const aadharInput = document.querySelector('input[name="aadhar"]');
+
+                aadharInput.addEventListener('input', () => {
+                    const aadharValue = aadharInput.value;
+                    const regex = /^[0-9]{12}$/;
+                    if (!regex.test(aadharValue)) {
+                        aadharInput.setCustomValidity('Aadhaar number should contain only 12 digits');
+                        aadharInput.reportValidity();
+                    } else {
+                        aadharInput.setCustomValidity('');
+                    }
+                });
+            </script>
         </div>
     </div>
 </div>
