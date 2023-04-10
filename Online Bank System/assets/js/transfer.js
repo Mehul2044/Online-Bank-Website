@@ -13,11 +13,11 @@ amountInput.addEventListener("input", () => {
     }
 });
 
-acc_noInput.addEventListener("input", () => {
-    if (!acc_noRegex.test(acc_noInput.value)) {
-        acc_noInput.setCustomValidity("Please enter only an integer.");
-        acc_noInput.reportValidity();
-    } else {
-        acc_noInput.setCustomValidity("");
-    }
-});
+// acc_noInput.addEventListener("input", () => {
+//     if (!acc_noRegex.test(acc_noInput.value)) {
+//         acc_noInput.setCustomValidity("Please enter only an integer.");
+//         acc_noInput.reportValidity();
+//     } else {
+//         acc_noInput.setCustomValidity("");
+//     }
+// });

@@ -1,10 +1,5 @@
-const acc_noInput = document.getElementById("acc_no");
 const ph_noInput = document.getElementById("ph_no");
-const nameInput = document.getElementById("name");
-
-const acc_noRegex = /^\d+$/;
 const ph_noRegex = /^\d{10}$/;
-const nameRegex = /^[a-zA-Z\s]+$/;
 
 nameInput.addEventListener("input", () => {
     if (!nameRegex.test(nameInput.value)) {

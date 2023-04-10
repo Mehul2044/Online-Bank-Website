@@ -32,42 +32,35 @@
             Phone number
         </h3>
         <p id="phone_num">7654334567</p>
-        <div class="contactbox">
-            <div class="contact-left">
-                <h2>Send Your Queries</h2>
-                <br>
-                <form method="post" action="/contact_us">
-                    <div class="input-row">
-                        <div class="input-group">
-                            <label>Name</label>
-                            <input type="text" name="name" placeholder="Your Name" id="name">
-                        </div>
-                        <br>
-                        <div class="input-group">
-                            <label>Phone number</label>
-                            <input type="text" name="ph_no" placeholder="10 digit phone Number" id="ph_no"><i class="fa fa-phone" aria-hidden="true"></i>
-                        </div>
-                        <br>
-                        <div class="input-group">
-                            <label>Account number</label>
-                            <input type="text" name="acc_no" placeholder="A/C No." id="acc_no">
-                        </div>
-                        <br>
-                        <div class="input-group">
-                            <label>Querie Title</label>
-                            <input type="text" name="title" placeholder="Enter your query here">
-                        </div>
-                        <br>
-                    </div>
+        <% if(isLogged) { %>
+            <div class="contactbox">
+                <div class="contact-left">
+                    <h2>Send Your Queries</h2>
                     <br>
-                    <label id="queries_label">Queries</label>
-                    <textarea id="box_text" rows="10" name="message" placeholder="Your Message"></textarea>
-                    <br>
-                    <button type="submit">Send</button>
-                </form>
+                    <form method="post" action="/contact_us">
+                        <div class="input-row">
+                            <br>
+                            <div class="input-group">
+                                <label>Phone number</label>
+                                <input type="text" name="ph_no" placeholder="10 digit phone Number" id="ph_no"><i
+                                        class="fa fa-phone" aria-hidden="true"></i>
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <label>Querie Title</label>
+                                <input type="text" name="title" placeholder="Enter your query here">
+                            </div>
+                            <br>
+                        </div>
+                        <br>
+                        <label id="queries_label">Queries</label>
+                        <textarea id="box_text" rows="10" name="message" placeholder="Your Message"></textarea>
+                        <br>
+                        <button type="submit">Send</button>
+                    </form>
+                </div>
             </div>
-        </div>
-
+        <% } %>
     </div>
 
 </div>

@@ -24,13 +24,18 @@
                         <a class="nav-link" href="/main/view_profile">View Profile</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/main/update_profile">Edit profile</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="/main/transfer">Transfer</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/main/loan">Loan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-target="#change-details" data-bs-toggle="modal">Change
+                            Email Address</a>
+                    </li>
+                    <li class="nav-link">
+                        <a class="nav-link" href="#" data-bs-target="#change-password" data-bs-toggle="modal">Change
+                            Password</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" data-bs-target="#delete_account" data-bs-toggle="modal">Delete
@@ -135,6 +140,139 @@
                         aadharInput.reportValidity();
                     } else {
                         aadharInput.setCustomValidity('');
+                    }
+                });
+            </script>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="change-details" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <style>
+                .modal form {
+                    min-width: 500px;
+                    min-height: 500px;
+                    padding: 20px;
+                    background-color: #9cc2f0;
+                    border-radius: 5px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+                    float: left;
+                    margin: 0 auto 0 auto;
+                }
+
+                form img {
+                    margin-left: 7.5rem;
+                }
+
+                label {
+                    display: block;
+                    float: left;
+                    width: 200px;
+                    color: rgb(8, 8, 8);
+                }
+
+                label, input {
+                    display: block;
+                    margin-bottom: 20px;
+                }
+
+                input[type="submit"] {
+                    margin-left: 7.5rem;
+                    width: 12rem;
+                    background-color: #0053f9;
+                    color: rgb(255, 223, 223);
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                }
+
+                input[type="submit"]:hover {
+                    background-color: navy;
+                }
+            </style>
+            <form action="/main/update_email" method="post">
+                <img src="/images/profile_image.jpeg" width="200" height="200" alt="profile-image"/>
+                <br><br>
+                <br>
+                <label for="email">New Email-ID:</label>
+                <input type="email" id="email" name="email" placeholder="<%= eMail %>">
+                <input type="submit" value="Save">
+            </form>
+            <script>
+            </script>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="change-password" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <style>
+                .modal form {
+                    min-width: 500px;
+                    min-height: 500px;
+                    padding: 20px;
+                    background-color: #9cc2f0;
+                    border-radius: 5px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+                    float: left;
+                    margin: 0 auto 0 auto;
+                }
+
+                form img {
+                    margin-left: 7.5rem;
+                }
+
+                label {
+                    display: block;
+                    float: left;
+                    width: 200px;
+                    color: rgb(8, 8, 8);
+                }
+
+                label, input {
+                    display: block;
+                    margin-bottom: 20px;
+                }
+
+                input[type="submit"] {
+                    margin-left: 7.5rem;
+                    width: 12rem;
+                    background-color: #0053f9;
+                    color: rgb(255, 223, 223);
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                }
+
+                input[type="submit"]:hover {
+                    background-color: navy;
+                }
+            </style>
+            <form action="/main/update_password" method="post">
+                <img src="/images/profile_image.jpeg" width="200" height="200" alt="profile-image"/>
+                <br><br>
+                <br>
+                <label for="old">Old Password:</label>
+                <input type="password" id="old" name="old" placeholder="Old Password">
+                <label for="new">New Password:</label>
+                <input type="password" id="new" name="new" placeholder="New Password">
+                <input type="submit" value="Save">
+            </form>
+            <script>
+                const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+                const passwordInput = document.getElementById("new");
+                passwordInput.addEventListener("input", () => {
+                    if (!passwordRegex.test(passwordInput.value)) {
+                        passwordInput.setCustomValidity("Password should be at least 8 characters long, and contain at least one digit, " +
+                            "one lowercase and one uppercase letter.");
+                        passwordInput.reportValidity();
+                    } else {
+                        passwordInput.setCustomValidity("");
                     }
                 });
             </script>

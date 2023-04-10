@@ -2,22 +2,25 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const bodyParse = require("body-parser");
-// const collection = require("./models/mongodb");
-const relation = require("./models/sqlite");
-require("async");
+const collection = require("./models/mongodb");
 
-const date = require("./custome_node_modules/date");
+const {accountCollection} = require("./models/mongodb")
+const {balanceCollection} = require("./models/mongodb")
+const {transactionCollection} = require("./models/mongodb")
+const {deleteAccountCollection} = require("./models/mongodb")
+const {queriesCollection} = require("./models/mongodb")
+const {loanRequestCollection} = require("./models/mongodb")
+
+const date = require("./custom_node_modules/date");
 
 const port = process.env.PORT;
 const projectName = "MyBank";
 
-const db = relation.connect();
-relation.createTables(db);
-
 let isLogged = false;
 
+let password;
 let account_number;
-let fName;
+let firstName;
 let lastName;
 let eMail;
 
@@ -41,63 +44,65 @@ app.get("/registration", function (req, res) {
 });
 
 app.get("/about", function (req, res) {
-    res.render("about_us", {projectName: projectName, isLogged: isLogged, fName: fName});
+    res.render("about_us", {projectName: projectName, isLogged: isLogged, fName: firstName, eMail: eMail});
 });
 
 app.get("/terms_conditions", function (req, res) {
-    res.render("terms_conditions", {projectName: projectName, isLogged: isLogged, fName: fName, req: req});
+    res.render("terms_conditions", {
+        projectName: projectName,
+        isLogged: isLogged,
+        fName: firstName,
+        req: req,
+        eMail: eMail
+    });
 });
 
 app.get("/contact_us", function (req, res) {
-    res.render("contact_us", {projectName: projectName, isLogged: isLogged, fName: fName});
+    res.render("contact_us", {projectName: projectName, isLogged: isLogged, fName: firstName, eMail: eMail});
 });
 
-app.get("/main", function (req, res) {
+app.get("/main", async function (req, res) {
     if (isLogged) {
         let dateString = date.getDate();
-        let balance = 0;
-        db.get("select * from balance where acc_no = ?", [account_number], (err, row) => {
-            if (err) {
-                console.log(err);
-            } else {
-                balance = row.balance;
-                db.all("select * from transactions where sender_acc_no = ? or recipient = ?", [account_number, account_number], (err, rows) => {
-                    if (err) {
-                        console.log(err.message);
-                    } else {
-                        let transactions_length = rows.length;
-                        let amount = [];
-                        let to_from = [];
-                        let date = [];
-                        let time = [];
-                        for (let i = 0; i < transactions_length; i++) {
-                            if (account_number === rows[i].sender_acc_no.toString()) {
-                                amount.push("-" + rows[i].amount.toString());
-                                to_from.push(rows[i].recipient.toString());
-                            } else if (account_number === rows[i].recipient) {
-                                amount.push("+" + rows[i].amount.toString());
-                                to_from.push(rows[i].sender_acc_no.toString());
-                            }
-                            date.push(rows[i].date);
-                            time.push(rows[i].time);
-                        }
-                        res.render("main", {
-                            projectName: projectName,
-                            fName: fName,
-                            dates: dateString,
-                            lName: lastName,
-                            acc_no: account_number,
-                            balance: balance,
-                            transactions_length: transactions_length,
-                            amount: amount,
-                            to_from: to_from,
-                            date: date,
-                            time: time,
-                        });
-                    }
-                });
+        try {
+            const balanceDoc = await balanceCollection.findOne({accountNumber: account_number});
+            const balance = balanceDoc.balance;
+            const transactions = await transactionCollection.find({
+                $or: [{sender_acc_no: account_number}, {recipient: account_number}],
+            });
+            let transactions_length = transactions.length;
+            let amount = [];
+            let to_from = [];
+            let date = [];
+            let time = [];
+            for (let i = 0; i < transactions_length; i++) {
+                if (account_number === transactions[i].sender_acc_no.toString()) {
+                    amount.push("-" + transactions[i].amount.toString());
+                    to_from.push(transactions[i].recipient.toString());
+                } else if (account_number === transactions[i].recipient) {
+                    amount.push("+" + transactions[i].amount.toString());
+                    to_from.push(transactions[i].sender_acc_no.toString());
+                }
+                date.push(transactions[i].date);
+                time.push(transactions[i].time);
             }
-        });
+            res.render("main", {
+                projectName: projectName,
+                fName: firstName,
+                dates: dateString,
+                lName: lastName,
+                acc_no: account_number,
+                balance: balance,
+                transactions_length: transactions_length,
+                amount: amount,
+                to_from: to_from,
+                date: date,
+                time: time,
+                eMail: eMail
+            });
+        } catch (err) {
+            console.log(err);
+        }
     } else {
         res.redirect("/login");
     }
@@ -105,7 +110,7 @@ app.get("/main", function (req, res) {
 
 app.get("/main/transfer", function (req, res) {
     if (isLogged) {
-        res.render("transfer", {projectName: projectName, fName: fName});
+        res.render("transfer", {projectName: projectName, fName: firstName, eMail: eMail});
     } else {
         res.redirect("/login");
     }
@@ -113,15 +118,7 @@ app.get("/main/transfer", function (req, res) {
 
 app.get("/main/view_profile", function (req, res) {
     if (isLogged) {
-        res.render("view_profile", {projectName: projectName, fName: fName, lName: lastName, eMail: eMail});
-    } else {
-        res.redirect("/login");
-    }
-});
-
-app.get("/main/update_profile", function (req, res) {
-    if (isLogged) {
-        res.render("update_profile", {projectName: projectName, fName: fName, lName: lastName, eMail: eMail});
+        res.render("view_profile", {projectName: projectName, fName: firstName, lName: lastName, eMail: eMail});
     } else {
         res.redirect("/login");
     }
@@ -129,7 +126,7 @@ app.get("/main/update_profile", function (req, res) {
 
 app.get("/main/loan", function (req, res) {
     if (isLogged) {
-        res.render("loan", {projectName: projectName, fName: fName});
+        res.render("loan", {projectName: projectName, fName: firstName, eMail: eMail});
     } else {
         res.redirect("/login");
     }
@@ -137,175 +134,163 @@ app.get("/main/loan", function (req, res) {
 
 app.post("/login", async (req, res) => {
     account_number = req.body.account_number;
-    let password = req.body.password;
-    await db.get("SELECT * FROM accounts WHERE account_number = ?", [account_number], (err, row) => {
-        if (err) {
-            console.error(err.message);
-            return;
-        }
-        if (row) {
-            let password_check;
-            password_check = row.password
-            if (password_check === password) {
-                isLogged = true;
-                fName = row.fname;
-                lastName = row.lname;
-                eMail = row.email;
-                res.redirect("/main")
-            } else {
-                res.send("Details do not match.");
-            }
+    password = req.body.password;
+    const user = await accountCollection.findOne({
+        _id: account_number
+    })
+    if (!user) {
+        res.send("Account does not exist")
+    } else {
+        if (password === user.password) {
+            isLogged = true;
+            firstName = user.firstName;
+            lastName = user.lastName;
+            eMail = user.eMail;
+            res.redirect("/main")
         } else {
-            res.send("Details do not match.");
+            res.send("Details do not match")
         }
-    });
+    }
 });
 
 app.post("/registration", async (req, res) => {
-    fName = req.body.firstName
-    lastName = req.body.lastName
-    eMail = req.body.eMail
-    let password = req.body.password
-    let exist;
-
-    function checkAccountExists(eMail) {
-        return new Promise((resolve, reject) => {
-            db.get(`SELECT * FROM accounts WHERE eMail = ?`, [eMail], (err, row) => {
-                if (err) {
-                    console.error(err.message);
-                    reject(err);
-                }
-                exist = !!row;
-                resolve(exist);
-            });
-        });
-    }
-
-    exist = await checkAccountExists(eMail);
-    if (exist) {
-        res.send("Account already exists.");
-    } else if (!exist) {
-        db.run("insert into accounts (fname, lname, email, password) values " +
-            "('" + fName + "','" + lastName + "','" + eMail + "','" + password + "')", async err => {
-            if (err) {
-                console.log(err);
-            } else {
-                isLogged = true;
-                db.get("select * from accounts where rowid = last_insert_rowid();", (err, row) => {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        fName = row.fname;
-                        eMail = row.email;
-                        account_number = row.account_number;
-                        db.run("insert into balance values(?, ?);", [account_number, 0], err => {
-                            if (err) {
-                                console.log(err.message);
-                            } else {
-                                res.redirect("/main");
-                            }
-                        });
-                    }
-                });
-            }
-        });
-    }
+    // firstName = req.body.firstName
+    // lastName = req.body.lastName
+    // eMail = req.body.eMail
+    // let password = req.body.password
+    // let exist;
+    //
+    // function checkAccountExists(eMail) {
+    //     return new Promise((resolve, reject) => {
+    //         db.get(`SELECT * FROM accounts WHERE eMail = ?`, [eMail], (err, row) => {
+    //             if (err) {
+    //                 console.error(err.message);
+    //                 reject(err);
+    //             }
+    //             exist = !!row;
+    //             resolve(exist);
+    //         });
+    //     });
+    // }
+    //
+    // exist = await checkAccountExists(eMail);
+    // if (exist) {
+    //     res.send("Account already exists.");
+    // } else if (!exist) {
+    //     db.run("insert into accounts (fname, lname, email, password) values " +
+    //         "('" + fName + "','" + lastName + "','" + eMail + "','" + password + "')", async err => {
+    //         if (err) {
+    //             console.log(err);
+    //         } else {
+    //             isLogged = true;
+    //             db.get("select * from accounts where rowid = last_insert_rowid();", (err, row) => {
+    //                 if (err) {
+    //                     console.log(err);
+    //                 } else {
+    //                     fName = row.fname;
+    //                     eMail = row.email;
+    //                     account_number = row.account_number;
+    //                     db.run("insert into balance values(?, ?);", [account_number, 0], err => {
+    //                         if (err) {
+    //                             console.log(err.message);
+    //                         } else {
+    //                             res.redirect("/main");
+    //                         }
+    //                     });
+    //                 }
+    //             });
+    //         }
+    //     });
+    // }
 });
 
-app.post("/main/update_profile", function (req, res) {
-    let first = req.body.firstName;
-    let last = req.body.lastName;
+app.post("/main/update_email", function (req, res) {
     let mail = req.body.email;
-    if (!first) {
-        first = fName;
-    }
-    if (!last) {
-        last = lastName;
-    }
     if (!mail) {
         mail = eMail;
     }
-    db.run("update accounts set fname = ?, lname = ?, email = ? where account_number = ?", [first, last, mail, account_number], err => {
-        if (err) {
-            console.log(err);
-        } else {
-            fName = first;
-            lastName = last;
+    accountCollection.updateOne(
+        {_id: account_number}, {eMail: mail})
+        .then(function () {
             eMail = mail;
-            res.redirect("/main");
-        }
-    });
+            res.redirect("/main")
+        })
+        .catch(err => console.log(err.message));
+});
+
+app.post("/main/update_password", function (req, res) {
+    let oldP = req.body.old;
+    let newP = req.body.new;
+    if (oldP === password) {
+        accountCollection.updateOne(
+            {_id: account_number}, {password: newP})
+            .then(function () {
+                password = newP;
+                res.redirect("/main")
+            })
+            .catch(err => console.log(err.message));
+    } else {
+        res.send("Enter old password correctly.")
+    }
 });
 
 app.post("/main/transfer", async (req, res) => {
     let sender_account = account_number;
     let recipient_acc_no = req.body.recipient_acc_no;
     let amount = Number(req.body.amount);
-    let sender_balance = 0;
-    await db.get("select * from balance where acc_no = ?", [sender_account], (err, row) => {
-        if (err) {
-            console.log(err.message);
-        } else {
-            sender_balance = row.balance;
+
+    balanceCollection.findOne({accountNumber: sender_account})
+        .then(sender_balance_doc => {
+            let sender_balance = sender_balance_doc.balance;
             if (sender_balance < amount) {
                 res.send("Balance insufficient!");
             } else {
-                db.run("update balance set balance = balance + ? where acc_no = ?", [amount, recipient_acc_no], err => {
-                    if (err) {
-                        console.log(err.message);
-                    }
-                });
-                db.run("update balance set balance = balance - ? where acc_no = ?", [amount, sender_account], err => {
-                    if (err) {
-                        console.log(err.message);
-                    }
-                });
-                db.run("insert into transactions values(?, ?, ?, ?, ?);", [sender_account, amount, recipient_acc_no, new Date().toLocaleString().slice(0, 9).replace('T', ' '), new Date().toLocaleString().slice(11, 19).replace('T', ' ')], err => {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        console.log("Transaction Successful");
-                        res.redirect("/main");
-                    }
-                });
+                balanceCollection.updateOne(
+                    {accountNumber: recipient_acc_no}, {$inc: {balance: amount}},).catch(err => console.log(err.message));
+                balanceCollection.updateOne(
+                    {accountNumber: sender_account}, {$inc: {balance: -amount}},).catch(err => console.log(err.message));
+                transactionCollection.create({
+                    sender_acc_no: sender_account,
+                    amount: amount,
+                    recipient: recipient_acc_no,
+                    date: new Date().toLocaleString().slice(0, 9).replace('T', ' '),
+                    time: new Date().toLocaleString().slice(11, 19).replace('T', ' ')
+                },).catch(err => console.log(err.message));
             }
-        }
-    });
+        })
+        .then(() => res.redirect("/main"))
+        .catch(err => console.log(err.message));
 });
 
 app.post("/main/delete_account", function (req, res) {
-    db.run("insert into delete_account_request values(?, ?, ?);", [account_number, req.body.reason, req.body.aadhar], (err) => {
-        if (err) {
-            console.log(err.message);
-        } else {
-            console.log("Deletion request sent.");
-            res.redirect("/main");
-        }
-    });
+    deleteAccountCollection.create({
+        accountNumber: account_number, reason: req.body.reason, aadhar: req.body.aadhar
+    }).then(function () {
+        console.log("Deletion request sent.");
+        res.redirect("/main");
+    }).catch(err => console.log(err.message));
 });
 
 app.post("/contact_us", function (req, res) {
     let message = req.body.message;
-    let name = req.body.name;
     let ph_no = req.body.ph_no;
-    let acc_no = req.body.acc_no;
     let title = req.body.title;
-    if (!acc_no) {
-        db.run("insert into queries (name, phone, title, message) values(?, ?, ?, ?);", [name, ph_no, title, message], err => {
-            if (err) {
-                console.log(err.message);
-            } else {
-                res.redirect("/main");
-            }
-        });
+    if (!isLogged) {
+        queriesCollection.create({
+            name: firstName + " " + lastName,
+            phone: Number(ph_no),
+            acc_no: null,
+            title: title,
+            message: message
+        }).then(() => res.redirect("/main")).catch(err => console.log(err.message));
     } else {
-        db.run("insert into queries values(?, ?, ?, ?, ?);", [name, ph_no, acc_no, title, message], err => {
-            if (err) {
-                console.log(err.message);
-            } else {
-                res.redirect("/main");
-            }
-        });
+        queriesCollection.create({
+            name: firstName + " " + lastName,
+            phone: Number(ph_no),
+            acc_no: account_number,
+            title: title,
+            message: message
+        }).then(() => res.redirect("/main")).catch(err => console.log(err.message));
     }
 });
 
@@ -313,15 +298,16 @@ app.post("/main/loan/apply_loan", function (req, res) {
     let loan_amount = req.body.amount;
     let loan_type = req.body.loan_type;
     let reason = req.body.reason;
-    db.run("insert into loan values(?, ?, ?, ?);", [account_number, loan_amount, loan_type, reason], err => {
-        if (err) {
-            console.log(err.message);
-        } else {
-            res.redirect("/main");
-        }
-    });
+
+    loanRequestCollection.create({
+        acc_no: account_number,
+        loan_amount: loan_amount,
+        loan_type: loan_type,
+        reason: reason
+    }).then(() => res.redirect("/main")).catch(err => console.log(err.message));
 });
 
 app.listen(port, function () {
     console.log("Server is running on port " + port + ".");
+    collection.connect();
 });

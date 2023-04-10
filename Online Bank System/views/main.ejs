@@ -44,8 +44,14 @@
 
 <div class="separator"></div>
 
-<div class="transaction-history"><h4>TRANSACTION HISTORY:</h4></div>
-<div class="transaction-table">
+<button onclick="toggleTransactionTable()" class="btn btn-primary" style="width: 10%; margin: 3% auto 1%"
+        id="toggleTransactions">Show Transaction History
+</button>
+
+<div class="transaction-history" style="display: none;">
+        <h4>TRANSACTION HISTORY:</h4>
+</div>
+<div class="transaction-table" style="display: none;">
     <table class="table table-striped">
         <thead>
         <tr class="table-primary">
@@ -58,18 +64,35 @@
         </thead>
         <tbody>
         <% transactions_length %>
-        <% for(let i = 0; i<transactions_length; i++) { %>
-        <tr>
-            <th scope="row"><%= i + 1 %></th>
-            <td><%= amount[i] %></td>
-            <td><%= to_from[i] %></td>
-            <td><%= date[i] %></td>
-            <td><%= time[i] %></td>
-        </tr>
+        <% for(let i = 0; i < transactions_length; i++) { %>
+            <tr>
+                <th scope="row"><%= i + 1 %></th>
+                <td><%= amount[i] %></td>
+                <td><%= to_from[i] %></td>
+                <td><%= date[i] %></td>
+                <td><%= time[i] %></td>
+            </tr>
         <% } %>
         </tbody>
     </table>
 </div>
+
+<script>
+    function toggleTransactionTable() {
+        const button = document.getElementById("toggleTransactions");
+        button.style.display = 'none'; // hide the button
+        const transactionHistory = document.querySelector('.transaction-history');
+        const transactionTable = document.querySelector('.transaction-table');
+        if (transactionHistory.style.display === 'none') {
+            transactionHistory.style.display = 'block';
+            transactionTable.style.display = 'block';
+        } else {
+            transactionHistory.style.display = 'none';
+            transactionTable.style.display = 'none';
+        }
+    }
+
+</script>
 
 <%- include("partials/footer") %>
 
