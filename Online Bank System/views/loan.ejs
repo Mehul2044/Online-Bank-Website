@@ -25,11 +25,40 @@
             <h5>Check our UNSECURED LOAN SCHEMES here</h5>
             <h2><a href="#two">UNSECURED LOANS</a></h2>
         </div>
-        <button class="btn btn-primary btn-lg" data-bs-target="#apply_loan" data-bs-toggle="modal"><a href="#"
-                                                  style="color: white; text-decoration: none">Apply Now!</a>
-        </button>
+        <% if(loan_length > 0) { %>
+            <button class="btn btn-primary btn-lg loan-status-btn" style="margin-top: 5%"><a style="color: white; text-decoration: none;">Loan
+                    Status</a>
+            </button>
+        <% } %>
     </div>
 </div>
+
+<% if(loan_length > 0) { %>
+    <div class="container container-table loan-table" style="display: none">
+        <h4>Applied Loans:</h4>
+        <table class="table">
+            <thead>
+            <tr class="table-primary">
+                <th scope="col">#</th>
+                <th scope="col">Loan Type</th>
+                <th scope="col">Loan Amount</th>
+                <th scope="col">Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% loan_length %>
+            <% for(let i = 0; i < loan_length; i++) { %>
+                <tr>
+                    <th scope="row"><%= i + 1 %></th>
+                    <td><%= loan_type[i] %></td>
+                    <td><%= amount[i] %></td>
+                    <td><%= loan_status[i] %></td>
+                </tr>
+            <% } %>
+            </tbody>
+        </table>
+    </div>
+<% } %>
 
 <div class="container container-middle" id="one">
     <div>
@@ -223,3 +252,13 @@
 <%- include("partials/footer") %>
 
 </body>
+
+<script>
+    const loanStatusBtn = document.querySelector('.loan-status-btn');
+    const loanTable = document.querySelector('.loan-table');
+
+    loanStatusBtn.addEventListener('click', () => {
+        loanTable.style.display = 'table';
+        loanStatusBtn.style.display = 'none';
+    });
+</script>

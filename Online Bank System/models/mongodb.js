@@ -113,6 +113,30 @@ const LoanRequest = new mongoose.Schema({
         type: String,
         required: true,
         maxLength: 100
+    },
+    status: {
+        type: String,
+        required: true,
+        default: "Pending"
+    }
+});
+
+const AccountOpenRequests = new mongoose.Schema({
+    first_name: {
+        type: String,
+        required: true
+    },
+    last_name: {
+        type: String,
+        required: true,
+    },
+    email: {
+        type: String,
+        required: true,
+    },
+    formPath: {
+        type: String,
+        required: true
     }
 });
 
@@ -122,7 +146,8 @@ module.exports = {
     balanceCollection: mongoose.model("Balance", Balance),
     queriesCollection: mongoose.model("Queries", Queries),
     transactionCollection: mongoose.model("Transactions", Transactions),
-    loanRequestCollection: mongoose.model("Loan Requests", LoanRequest)
+    loanRequestCollection: mongoose.model("Loan Requests", LoanRequest),
+    accountOpenRequests: mongoose.model("Account Open Requests", AccountOpenRequests)
 };
 
 module.exports.connect = function () {

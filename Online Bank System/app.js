@@ -2,7 +2,26 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const bodyParse = require("body-parser");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
+
 const collection = require("./models/mongodb");
+const upload = multer({dest: "uploaded_forms/"});
+
+multer.diskStorage({
+    function(req, file, cb) {
+        cb(null, 'uploaded_forms/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+
+const dir = path.join(__dirname, 'uploaded_forms');
+if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+}
 
 const {accountCollection} = require("./models/mongodb")
 const {balanceCollection} = require("./models/mongodb")
@@ -10,6 +29,7 @@ const {transactionCollection} = require("./models/mongodb")
 const {deleteAccountCollection} = require("./models/mongodb")
 const {queriesCollection} = require("./models/mongodb")
 const {loanRequestCollection} = require("./models/mongodb")
+const {accountOpenRequests} = require("./models/mongodb")
 
 const date = require("./custom_node_modules/date");
 
@@ -124,9 +144,26 @@ app.get("/main/view_profile", function (req, res) {
     }
 });
 
-app.get("/main/loan", function (req, res) {
+app.get("/main/loan", async function (req, res) {
     if (isLogged) {
-        res.render("loan", {projectName: projectName, fName: firstName, eMail: eMail});
+        let amount = [];
+        let status = [];
+        let loan_type = [];
+        const loans = await loanRequestCollection.find({
+            acc_no: account_number
+        });
+        let loan_length = loans.length;
+        for (let i = 0; i < loan_length; i++) {
+            amount.push(loans[i].loan_amount.toString());
+            status.push(loans[i].status.toString());
+            loan_type.push(loans[i].loan_type.toString());
+        }
+        res.render("loan", {
+            projectName: projectName,
+            fName: firstName,
+            eMail: eMail,
+            loan_length: loan_length, loan_type: loan_type, amount: amount, loan_status: status
+        });
     } else {
         res.redirect("/login");
     }
@@ -153,55 +190,36 @@ app.post("/login", async (req, res) => {
     }
 });
 
-app.post("/registration", async (req, res) => {
-    // firstName = req.body.firstName
-    // lastName = req.body.lastName
-    // eMail = req.body.eMail
-    // let password = req.body.password
-    // let exist;
-    //
-    // function checkAccountExists(eMail) {
-    //     return new Promise((resolve, reject) => {
-    //         db.get(`SELECT * FROM accounts WHERE eMail = ?`, [eMail], (err, row) => {
-    //             if (err) {
-    //                 console.error(err.message);
-    //                 reject(err);
-    //             }
-    //             exist = !!row;
-    //             resolve(exist);
-    //         });
-    //     });
-    // }
-    //
-    // exist = await checkAccountExists(eMail);
-    // if (exist) {
-    //     res.send("Account already exists.");
-    // } else if (!exist) {
-    //     db.run("insert into accounts (fname, lname, email, password) values " +
-    //         "('" + fName + "','" + lastName + "','" + eMail + "','" + password + "')", async err => {
-    //         if (err) {
-    //             console.log(err);
-    //         } else {
-    //             isLogged = true;
-    //             db.get("select * from accounts where rowid = last_insert_rowid();", (err, row) => {
-    //                 if (err) {
-    //                     console.log(err);
-    //                 } else {
-    //                     fName = row.fname;
-    //                     eMail = row.email;
-    //                     account_number = row.account_number;
-    //                     db.run("insert into balance values(?, ?);", [account_number, 0], err => {
-    //                         if (err) {
-    //                             console.log(err.message);
-    //                         } else {
-    //                             res.redirect("/main");
-    //                         }
-    //                     });
-    //                 }
-    //             });
-    //         }
-    //     });
-    // }
+app.get("/form/:id", async (req, res) => {
+    const fileId = req.params.id;
+    const result = await accountOpenRequests.findOne({formPath: fileId}).catch(err => console.log(err.message));
+    if (!result) {
+        console.log("File not found.");
+    } else {
+        const file = fs.createReadStream(`./uploaded_forms/${fileId}`);
+        res.setHeader("Content-Type", "application/pdf");
+        file.pipe(res);
+    }
+});
+
+app.post("/registration", upload.single("file"), (req, res) => {
+    const file = req.file;
+    const fName = req.body.firstName;
+    const lName = req.body.lastName;
+    const email = req.body.eMail;
+    if (file == null) {
+        console.log("Error");
+        res.redirect("/registration");
+        return;
+    }
+    console.log("File Uploaded Successfully.");
+    const newRequest = new accountOpenRequests({
+        first_name: fName,
+        last_name: lName,
+        email: email,
+        formPath: file.filename
+    });
+    newRequest.save().then(() => res.redirect("/")).catch(err => console.log(err.message));
 });
 
 app.post("/main/update_email", function (req, res) {
@@ -303,7 +321,8 @@ app.post("/main/loan/apply_loan", function (req, res) {
         acc_no: account_number,
         loan_amount: loan_amount,
         loan_type: loan_type,
-        reason: reason
+        reason: reason,
+        status: "Pending"
     }).then(() => res.redirect("/main")).catch(err => console.log(err.message));
 });
 
