@@ -1,0 +1,25 @@
+<%- include("partials/header") %>
+<link rel="stylesheet" href="/css/login.css">
+<script src="/js/login_validate.js" defer></script>
+<title><%= projectName %></title>
+</head>
+
+<body>
+
+<%-include("partials/nav_before_login") %>
+
+<form action="/login-admin" method="post">
+    <div class="py-4"></div>
+    <div id="user-login">
+        <label for="admin_id">Admin ID:</label>
+        <input type="text" id="admin_id" name="admin_id" required placeholder="Admin ID">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required placeholder="Password">
+        <input type="submit" value="Login">
+    </div>
+</form>
+
+<%- include("partials/footer") %>
+
+</body>
+</html>

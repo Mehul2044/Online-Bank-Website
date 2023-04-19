@@ -1,0 +1,29 @@
+<%- include("partials/header") %>
+<link rel="stylesheet" href="/css/login.css">
+<script src="/js/login_validate.js" defer></script>
+<title><%= projectName %></title>
+</head>
+
+<body>
+
+<%-include("partials/nav_before_login") %>
+
+<form action="/login-user" method="post">
+    <div class="py-4"></div>
+    <div id="user-login">
+        <label for="account_number">Account Number:</label>
+        <input type="text" id="account_number" name="account_number" required placeholder="A/C No.">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required placeholder="Password">
+        <input type="submit" value="Login">
+        <div class="sign-up">
+            <label for="button" style="margin-bottom: 0">Not Registered Yet!</label>
+            <a style="text-decoration: none" href="/registration"><input type="button" value="Register Now!"></a>
+        </div>
+    </div>
+</form>
+
+<%- include("partials/footer") %>
+
+</body>
+</html>

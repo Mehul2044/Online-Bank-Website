@@ -53,9 +53,14 @@ app.get("/", function (req, res) {
     res.render("home_page", {projectName: projectName});
 });
 
-app.get("/login", function (req, res) {
+app.get("/login-user", function (req, res) {
     isLogged = false;
-    res.render("login", {projectName: projectName});
+    res.render("login_user", {projectName: projectName});
+});
+
+app.get("/login-admin", function (req, res) {
+   isLogged = false;
+   res.render("login_admin", {projectName: projectName});
 });
 
 app.get("/registration", function (req, res) {
@@ -169,7 +174,7 @@ app.get("/main/loan", async function (req, res) {
     }
 });
 
-app.post("/login", async (req, res) => {
+app.post("/login-user", async (req, res) => {
     account_number = req.body.account_number;
     password = req.body.password;
     const user = await accountCollection.findOne({
