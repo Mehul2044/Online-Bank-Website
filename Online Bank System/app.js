@@ -186,6 +186,14 @@ app.get("/admin_main", function (req, res) {
     }
 });
 
+app.get("/admin_main/loan", function (req, res) {
+    if (isAdminLogged){
+        res.render("admin_loan", {projectName: projectName, name: adminName});
+    }else{
+        res.redirect("/");
+    }
+});
+
 app.get("/form/:id", async (req, res) => {
     const fileId = req.params.id;
     const result = await accountOpenRequests.findOne({formPath: fileId}).catch(err => console.log(err.message));
