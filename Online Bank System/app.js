@@ -45,12 +45,14 @@ let account_number;
 let firstName;
 let lastName;
 let eMail;
+let adminName;
 
 app.use(bodyParse.urlencoded({extended: true}));
 app.use(express.static("assets"));
 app.set("view engine", "ejs");
 
 app.get("/", function (req, res) {
+    isAdminLogged = false;
     isLogged = false;
     res.render("home_page", {projectName: projectName});
 });
@@ -176,6 +178,14 @@ app.get("/main/loan", async function (req, res) {
     }
 });
 
+app.get("/admin_main", function (req, res) {
+    if (isAdminLogged) {
+        res.render("admin_main", {name: adminName, projectName: projectName});
+    } else {
+        res.redirect("/");
+    }
+});
+
 app.get("/form/:id", async (req, res) => {
     const fileId = req.params.id;
     const result = await accountOpenRequests.findOne({formPath: fileId}).catch(err => console.log(err.message));
@@ -204,7 +214,7 @@ app.post("/login-user", async (req, res) => {
             eMail = user.eMail;
             res.redirect("/main")
         } else {
-            res.send("Details do not match")
+            res.send("Details do not match");
         }
     }
 });
@@ -219,9 +229,9 @@ app.post("/login-admin", async function (req, res) {
         res.send("No Admin ID found.")
     } else {
         if (password === user.password) {
-            isAdminLogged = false;
-            name = user.name;
-            res.send("Successfully logged in with name: " + name);
+            isAdminLogged = true;
+            adminName = user.name;
+            res.redirect("/admin_main");
         } else {
             res.send("Details do not match.");
         }
