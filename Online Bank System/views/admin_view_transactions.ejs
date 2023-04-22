@@ -1,0 +1,89 @@
+<%- include("partials/header") %>
+<title><%= projectName %></title>
+<style>
+    .transaction-history {
+        margin: 5rem auto 1rem;
+    }
+
+    .transaction-table {
+        overflow-y: auto;
+        height: 10rem;
+        margin-bottom: 5rem;
+    }
+
+    .transaction-table thead th {
+        position: sticky;
+        top: 0;
+    }
+
+    .balance-table {
+        max-width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .transaction-table {
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    h4 {
+        margin-top: 2em;
+    }
+
+    h4 {
+        text-align: center;
+        font-size: 24px;
+        margin-top: 40px;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+</style>
+</head>
+
+<body>
+
+<%- include("partials/nav_admin") %>
+
+
+<div style="margin-top: 6rem"></div>
+
+<form class="d-flex" role="search" style="width: 40%; padding: 2%;">
+    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+           style="background-color: lightblue; padding: 2%">
+    <button class="btn btn-outline-success" type="submit">Search</button>
+</form>
+
+<div class="transaction-history">
+    <h4>TRANSACTION DETAILS:</h4>
+</div>
+<div class="transaction-table">
+    <table class="table table-striped">
+        <thead>
+        <tr class="table-primary">
+            <th scope="col">#</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Amount Received To/From</th>
+            <th scope="col">Date</th>
+            <th scope="col">Time</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% transactions_length %>
+        <% for(let i = 0; i < transactions_length; i++) { %>
+            <tr>
+                <th scope="row"><%= i + 1 %></th>
+                <td><%= amount[i] %></td>
+                <td><%= to_from[i] %></td>
+                <td><%= date[i] %></td>
+                <td><%= time[i] %></td>
+            </tr>
+        <% } %>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

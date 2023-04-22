@@ -1,51 +1,34 @@
 <%- include("partials/header") %>
 <title><%= projectName %></title>
-<style>
-    .transaction-history {
-        margin-top: 5rem;
-    }
-    .transaction-table {
-        overflow-y: auto;
-        height: 10rem;
-    }
-    .transaction-table thead th {
-        position: sticky;
-        top: 0;
-    }
-</style>
+<link rel="stylesheet" href="/css/admin_main.css">
 </head>
 
 <body>
 
 <%- include("partials/nav_admin") %>
 
-<div class="transaction-history">
-    <h4>TRANSACTION DETAILS:</h4>
+<div style="margin-top: 5rem"></div>
+
+<div class="section date-stock">
+    <h4>Miscellaneous</h4>
+    <p style="font-weight: bold">Current Date: <%= dateString %></p>
+    <p style="font-weight: bold; color: green">Current Stock Price: <%= stockprice %></p>
 </div>
-<div class="transaction-table">
-    <table class="table table-striped">
-        <thead>
-        <tr class="table-primary">
-            <th scope="col">#</th>
-            <th scope="col">Amount</th>
-            <th scope="col">Amount Received To/From</th>
-            <th scope="col">Date</th>
-            <th scope="col">Time</th>
-        </tr>
-        </thead>
-        <tbody>
-        <% transactions_length %>
-        <% for(let i = 0; i < transactions_length; i++) { %>
-            <tr>
-                <th scope="row"><%= i + 1 %></th>
-                <td><%= amount[i] %></td>
-                <td><%= to_from[i] %></td>
-                <td><%= date[i] %></td>
-                <td><%= time[i] %></td>
-            </tr>
-        <% } %>
-        </tbody>
-    </table>
+
+<div class="section">
+    <h4>Bank Financial Performances:</h4>
+    <p>Assets: <%= assets %></p>
+    <p>Liabilities: <%= liabilities %></p>
+    <p>Revenue: <%= revenue %></p>
+    <p>Profits: <%= profits %></p>
+</div>
+
+<div style="margin-top: 2rem"></div>
+<div class="section">
+    <h4>Risk Management Information:</h4>
+    <p style="color: #1E90FF;font-weight: bold">Loan Portfolios: <%= loan_portfolios %></p>
+    <p style="color: #DC143C; font-weight: bold">Credit Risk: <%= credit_risk %></p>
+    <p style="color: #DC143C; font-weight: bold">Market Risk: <%= market_risk %></p>
 </div>
 
 </body>

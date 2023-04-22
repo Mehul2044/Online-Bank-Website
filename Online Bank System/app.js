@@ -32,7 +32,7 @@ const {loanRequestCollection} = require("./models/mongodb")
 const {accountOpenRequests} = require("./models/mongodb")
 const {adminLoginCollection} = require("./models/mongodb")
 
-const date = require("./custom_node_modules/date");
+const dateString = require("./custom_node_modules/date");
 const {del} = require("express/lib/application");
 
 const port = process.env.PORT;
@@ -93,7 +93,7 @@ app.get("/contact_us", function (req, res) {
 
 app.get("/main", async function (req, res) {
     if (isLogged) {
-        let dateString = date.getDate();
+        let dateString = dateString.getDate();
         try {
             const balanceDoc = await balanceCollection.findOne({accountNumber: account_number});
             const balance = balanceDoc.balance;
@@ -181,6 +181,26 @@ app.get("/main/loan", async function (req, res) {
 
 app.get("/admin_main", async function (req, res) {
     if (isAdminLogged) {
+            res.render("admin_main", {
+                name: adminName,
+                projectName: projectName,
+                assets: "$500 billion",
+                liabilities: "$400 billion",
+                revenue: "$50 billion",
+                profits: "$10 billion",
+                loan_portfolios: "$10 billion",
+                credit_risk: "5%",
+                market_risk: "2.5%",
+                dateString:dateString.getDate(),
+                stockprice: "$44.20 per share",
+            });
+    } else {
+        res.redirect("/");
+    }
+});
+
+app.get("/admin_main/view_transactions", async function (req, res) {
+    if (isAdminLogged) {
         try {
             const transactions = await transactionCollection.find({});
             let transactions_length = transactions.length;
@@ -189,24 +209,19 @@ app.get("/admin_main", async function (req, res) {
             let date = [];
             let time = [];
             for (let i = 0; i < transactions_length; i++) {
-                if (account_number === transactions[i].sender_acc_no.toString()) {
-                    amount.push("-" + transactions[i].amount.toString());
-                    to_from.push(transactions[i].recipient.toString());
-                } else if (account_number === transactions[i].recipient) {
-                    amount.push("+" + transactions[i].amount.toString());
-                    to_from.push(transactions[i].sender_acc_no.toString());
-                }
+                amount.push(transactions[i].amount);
+                to_from.push(transactions[i].recipient + "   /   " + transactions[i].sender_acc_no);
                 date.push(transactions[i].date);
                 time.push(transactions[i].time);
             }
-            res.render("admin_main", {
+            res.render("admin_view_transactions", {
                 name: adminName,
                 projectName: projectName,
                 transactions_length: transactions_length,
                 amount: amount,
                 to_from: to_from,
                 date: date,
-                time: time
+                time: time,
             });
         } catch (error) {
             console.log(error);
@@ -531,11 +546,6 @@ app.post("/admin_main/del_acc/reject", async function
         console.log(error);
         res.status(500).send("An error occurred.");
     }
-});
-
-app.post("/admin_main/del_acc/reject", async function
-    (req, res) {
-
 });
 
 app.post("/login-user", async (req, res) => {
