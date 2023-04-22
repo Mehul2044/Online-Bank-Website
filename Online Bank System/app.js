@@ -227,6 +227,56 @@ app.get("/form/:id", async (req, res) => {
     }
 });
 
+app.get("/admin_main/loan/:acc_no", async function (req, res) {
+    let acc_no = req.params.acc_no;
+    if (isAdminLogged) {
+        const account_details = await accountCollection.findOne({_id: acc_no});
+        let dateString = date.getDate();
+        try {
+            const balanceDoc = await balanceCollection.findOne({accountNumber: acc_no});
+            const balance = balanceDoc.balance;
+            const transactions = await transactionCollection.find({
+                $or: [{sender_acc_no: acc_no}, {recipient: acc_no}],
+            });
+            let transactions_length = transactions.length;
+            let amount = [];
+            let to_from = [];
+            let date = [];
+            let time = [];
+            for (let i = 0; i < transactions_length; i++) {
+                if (acc_no === transactions[i].sender_acc_no.toString()) {
+                    amount.push("-" + transactions[i].amount.toString());
+                    to_from.push(transactions[i].recipient.toString());
+                } else if (acc_no === transactions[i].recipient) {
+                    amount.push("+" + transactions[i].amount.toString());
+                    to_from.push(transactions[i].sender_acc_no.toString());
+                }
+                date.push(transactions[i].date);
+                time.push(transactions[i].time);
+            }
+            res.render("admin_account_viewing", {
+                projectName: projectName,
+                fName: account_details.firstName,
+                dates: dateString,
+                lName: account_details.lastName,
+                acc_no: acc_no,
+                balance: balance,
+                transactions_length: transactions_length,
+                amount: amount,
+                to_from: to_from,
+                date: date,
+                time: time,
+                eMail: eMail,
+                name: adminName
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    } else {
+        res.redirect("/");
+    }
+});
+
 app.post("/login-user", async (req, res) => {
     account_number = req.body.account_number;
     password = req.body.password;
@@ -268,12 +318,13 @@ app.post("/login-admin", async function (req, res) {
 });
 
 // Accept loan request
-app.post("/admin_main/loan/accept", async function (req, res) {
+app.post("/admin_main/loan/accept", async function
+    (req, res) {
     const loanId = req.body.loan_id;
     try {
         const result = await loanRequestCollection.updateOne(
-            { _id: loanId },
-            { $set: { status: "Accepted" } }
+            {_id: loanId},
+            {$set: {status: "Accepted"}}
         );
         console.log(result);
         res.redirect("/admin_main/loan");
@@ -284,12 +335,13 @@ app.post("/admin_main/loan/accept", async function (req, res) {
 });
 
 // Reject loan request
-app.post("/admin_main/loan/reject", async function (req, res) {
+app.post("/admin_main/loan/reject", async function
+    (req, res) {
     const loanId = req.body.loan_id;
     try {
         const result = await loanRequestCollection.updateOne(
-            { _id: loanId },
-            { $set: { status: "Rejected" } }
+            {_id: loanId},
+            {$set: {status: "Rejected"}}
         );
         console.log(result);
         res.redirect("/admin_main/loan");

@@ -1,0 +1,76 @@
+<%- include("partials/header") %>
+<title><%= projectName %></title>
+<link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body>
+
+<%- include("partials/nav_admin") %>
+
+<div class="info">
+    <img src="/images/profile_image.jpeg" width="160" height="200">
+    <div class="info-text">
+        <pre>Acount Holder Name :  <%= fName %> <%= lName %></pre>
+        <pre>Account Number     :  <%= acc_no %></pre>
+        <br><br>
+        <pre>Today's Date       :  <%= dates %></pre>
+    </div>
+</div>
+
+<div class="separator"></div>
+
+<div class="balance"><h4>BALANCE:</h4></div>
+<div>
+    <div class="balance-table">
+        <table class="table table-striped">
+            <thead>
+            <tr class="table-primary">
+                <th scope="col">Account Holder</th>
+                <th scope="col">Account Number</th>
+                <th scope="col">Balance Amount</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><%= fName %> <%= lName %></td>
+                <td><%= acc_no %></td>
+                <td><%= balance %></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="separator"></div>
+
+<div class="transaction-history">
+    <h4>TRANSACTION HISTORY:</h4>
+</div>
+<div class="transaction-table">
+    <table class="table table-striped">
+        <thead>
+        <tr class="table-primary">
+            <th scope="col">#</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Amount Received To/From</th>
+            <th scope="col">Date</th>
+            <th scope="col">Time</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% transactions_length %>
+        <% for(let i = 0; i < transactions_length; i++) { %>
+            <tr>
+                <th scope="row"><%= i + 1 %></th>
+                <td><%= amount[i] %></td>
+                <td><%= to_from[i] %></td>
+                <td><%= date[i] %></td>
+                <td><%= time[i] %></td>
+            </tr>
+        <% } %>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

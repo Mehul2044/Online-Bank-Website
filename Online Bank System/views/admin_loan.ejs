@@ -7,43 +7,48 @@
 
 <%- include("partials/nav_admin") %>
 
-<div style="margin-top: 5rem"></div>
-<h1 class="heading">Pending Loan Status..</h1>
-
-<div class="d-flex justify-content-center">
-    <div class="row heading-row">
-        <div class="col-sm-1 heading-column">#</div>
-        <div class="col-sm-1 heading-column">Loan Type</div>
-        <div class="col-sm-3 heading-column">Reason</div>
-        <div class="col-sm-1 heading-column">Credit Score</div>
-        <div class="col-sm-2 heading-column">Loan Amount</div>
-        <div class="col-sm-2 heading-column">-</div>
-        <div class="col-sm-2 heading-column">-</div>
-    </div>
-</div>
-<% for(let i = 0; i < loan_length; i++)  { %>
+<% if (loan_length > 0) { %>
+    <div style="margin-top: 5rem"></div>
+    <h1 class="heading">Pending Loan Status..</h1>
     <div class="d-flex justify-content-center">
-        <div class="row loan-row">
-            <div class="col-sm-1 heading-column"><%= i + 1 %></div>
-            <div class="col-sm-1 heading-column"><%= loan_type[i] %></div>
-            <div class="col-sm-3 heading-column"><%= reason[i] %></div>
-            <div class="col-sm-1 heading-column"><%= credit_score[i] %></div>
-            <div class="col-sm-2 heading-column"><%= loan_amount[i] %></div>
-            <div class="col-sm-2 heading-column">
-                <form action="/admin_main/loan/accept" method="post">
-                    <input type="hidden" name="loan_id" value="<%= loans[i]._id %>">
-                    <button type="submit" class="btn btn-dark">Accept</button>
-                </form>
-            </div>
-            <div class="col-sm-2 heading-column">
-                <form action="/admin_main/loan/reject" method="post">
-                    <input type="hidden" name="loan_id" value="<%= loans[i]._id %>">
-                    <button type="submit" class="btn btn-danger">Reject</button>
-                </form>
-            </div>
+        <div class="row heading-row">
+            <div class="col-sm-1 heading-column">#</div>
+            <div class="col-sm-1 heading-column">Loan Type</div>
+            <div class="col-sm-3 heading-column">Reason</div>
+            <div class="col-sm-1 heading-column">Credit Score</div>
+            <div class="col-sm-2 heading-column">Loan Amount</div>
+            <div class="col-sm-2 heading-column">-</div>
+            <div class="col-sm-2 heading-column">-</div>
         </div>
     </div>
+    <% for(let i = 0; i < loan_length; i++)  { %>
+        <div class="d-flex justify-content-center">
+            <div class="row loan-row">
+                <div class="col-sm-1 heading-column"><a
+                            href="/admin_main/loan/<%= loans[i].acc_no %>"><%= i + 1 %></a></div>
+                <div class="col-sm-1 heading-column"><%= loan_type[i] %></div>
+                <div class="col-sm-3 heading-column"><%= reason[i] %></div>
+                <div class="col-sm-1 heading-column"><%= credit_score[i] %></div>
+                <div class="col-sm-2 heading-column"><%= loan_amount[i] %></div>
+                <div class="col-sm-2 heading-column">
+                    <form action="/admin_main/loan/accept" method="post">
+                        <input type="hidden" name="loan_id" value="<%= loans[i]._id %>">
+                        <button type="submit" class="btn btn-dark">Accept</button>
+                    </form>
+                </div>
+                <div class="col-sm-2 heading-column">
+                    <form action="/admin_main/loan/reject" method="post">
+                        <input type="hidden" name="loan_id" value="<%= loans[i]._id %>">
+                        <button type="submit" class="btn btn-danger">Reject</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <% } %>
+    <p style="margin-top: 5rem">** Please note that Accept or Reject is final and cannot be reverted.</p>
+
+<% } else { %>
+    <div style="margin-left: 47%; margin-top: 25%">No Pending Loans to approve!</div>
 <% } %>
-<p></p>
 </body>
 </html>
