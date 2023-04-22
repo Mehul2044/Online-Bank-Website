@@ -1,0 +1,52 @@
+<%- include("partials/header") %>
+<title><%= projectName %></title>
+<link rel="stylesheet" href="/css/admin_loan.css">
+</head>
+
+<body>
+
+<%- include("partials/nav_admin") %>
+
+<% if (del_len > 0) { %>
+    <div style="margin-top: 5rem"></div>
+    <h1 class="heading">Pending Delete Request..</h1>
+    <div class="d-flex justify-content-center">
+        <div class="row heading-row">
+            <div class="col-sm-1 heading-column">#</div>
+            <div class="col-sm-4 heading-column">Account Number</div>
+            <div class="col-sm-4 heading-column">Reason</div>
+            <div class="col-sm-1 heading-column">Aadhar Number</div>
+            <div class="col-sm-1 heading-column">-</div>
+            <div class="col-sm-1 heading-column">-</div>
+        </div>
+    </div>
+    <% for(let i = 0; i < del_len; i++)  { %>
+        <div class="d-flex justify-content-center">
+            <div class="row loan-row">
+                <div class="col-sm-1 heading-column"><a
+                            href="/admin_main/deleteAccount/<%= del_acc[i].accountNumber %>"><%= i + 1 %></a></div>
+                <div class="col-sm-4 heading-column"><%= account_number[i] %></div>
+                <div class="col-sm-4 heading-column"><%= reason[i] %></div>
+                <div class="col-sm-1 heading-column"><%= aadhar_number[i] %></div>
+                <div class="col-sm-1 heading-column">
+                    <form action="/admin_main/del_acc/accept" method="post">
+                        <input type="hidden" name="del_acc_id" value="<%= del_acc[i]._id %>">
+                        <button type="submit" class="btn btn-dark">Accept</button>
+                    </form>
+                </div>
+                <div class="col-sm-1 heading-column">
+                    <form action="/admin_main/del_acc/reject" method="post">
+                        <input type="hidden" name="del_acc_id" value="<%= del_acc[i]._id %>">
+                        <button type="submit" class="btn btn-danger">Reject</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <% } %>
+    <p style="margin-top: 5rem">** Please note that Accept or Reject is final and cannot be reverted.</p>
+
+<% } else { %>
+    <div style="margin-left: 47%; margin-top: 25%">No Pending requests to approve!</div>
+<% } %>
+</body>
+</html>

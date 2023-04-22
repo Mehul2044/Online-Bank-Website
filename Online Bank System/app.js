@@ -292,6 +292,84 @@ app.get("/admin_main/account_requests", async function (req, res) {
     }
 });
 
+app.get("/admin_main/delete_account", async function (req, res){
+    if (isAdminLogged){
+
+        let account_number = [];
+        let reason = [];
+        let aadhar_number = [];
+        const del_acc = await deleteAccountCollection.find();
+        const del_len = del_acc.length
+        for(let i = 0; i<del_len; i++){
+            account_number.push(del_acc[i].accountNumber.toString());
+            reason.push(del_acc[i].reason.toString());
+            aadhar_number.push(del_acc[i].aadhar.toString());
+        }
+        res.render("delete_account",{
+            projectName : projectName,
+            account_number : account_number,
+            reason : reason,
+            aadhar_number : aadhar_number,
+            del_len : del_len,
+            name: adminName,
+            del_acc : del_acc
+        })
+    }
+    else {
+        res.redirect("/");
+    }
+})
+
+app.get("/admin_main/deleteAccount/:acc_no", async function (req, res) {
+    let acc_no = req.params.acc_no;
+    if (isAdminLogged) {
+        const account_details = await accountCollection.findOne({_id: acc_no});
+        let dateString = date.getDate();
+        try {
+            const balanceDoc = await balanceCollection.findOne({accountNumber: acc_no});
+            const balance = balanceDoc.balance;
+            const transactions = await transactionCollection.find({
+                $or: [{sender_acc_no: acc_no}, {recipient: acc_no}],
+            });
+            let transactions_length = transactions.length;
+            let amount = [];
+            let to_from = [];
+            let date = [];
+            let time = [];
+            for (let i = 0; i < transactions_length; i++) {
+                if (acc_no === transactions[i].sender_acc_no.toString()) {
+                    amount.push("-" + transactions[i].amount.toString());
+                    to_from.push(transactions[i].recipient.toString());
+                } else if (acc_no === transactions[i].recipient) {
+                    amount.push("+" + transactions[i].amount.toString());
+                    to_from.push(transactions[i].sender_acc_no.toString());
+                }
+                date.push(transactions[i].date);
+                time.push(transactions[i].time);
+            }
+            res.render("admin_account_viewing", {
+                projectName: projectName,
+                fName: account_details.firstName,
+                dates: dateString,
+                lName: account_details.lastName,
+                acc_no: acc_no,
+                balance: balance,
+                transactions_length: transactions_length,
+                amount: amount,
+                to_from: to_from,
+                date: date,
+                time: time,
+                eMail: eMail,
+                name: adminName
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    } else {
+        res.redirect("/");
+    }
+});
+
 app.post("/login-user", async (req, res) => {
     account_number = req.body.account_number;
     password = req.body.password;
