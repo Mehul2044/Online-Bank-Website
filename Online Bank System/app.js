@@ -30,6 +30,7 @@ const {deleteAccountCollection} = require("./models/mongodb")
 const {queriesCollection} = require("./models/mongodb")
 const {loanRequestCollection} = require("./models/mongodb")
 const {accountOpenRequests} = require("./models/mongodb")
+const {adminLoginCollection} = require("./models/mongodb")
 
 const date = require("./custom_node_modules/date");
 
@@ -37,6 +38,7 @@ const port = process.env.PORT;
 const projectName = "MyBank";
 
 let isLogged = false;
+let isAdminLogged = false;
 
 let password;
 let account_number;
@@ -59,8 +61,8 @@ app.get("/login-user", function (req, res) {
 });
 
 app.get("/login-admin", function (req, res) {
-   isLogged = false;
-   res.render("login_admin", {projectName: projectName});
+    isLogged = false;
+    res.render("login_admin", {projectName: projectName});
 });
 
 app.get("/registration", function (req, res) {
@@ -174,6 +176,18 @@ app.get("/main/loan", async function (req, res) {
     }
 });
 
+app.get("/form/:id", async (req, res) => {
+    const fileId = req.params.id;
+    const result = await accountOpenRequests.findOne({formPath: fileId}).catch(err => console.log(err.message));
+    if (!result) {
+        console.log("File not found.");
+    } else {
+        const file = fs.createReadStream(`./uploaded_forms/${fileId}`);
+        res.setHeader("Content-Type", "application/pdf");
+        file.pipe(res);
+    }
+});
+
 app.post("/login-user", async (req, res) => {
     account_number = req.body.account_number;
     password = req.body.password;
@@ -195,15 +209,22 @@ app.post("/login-user", async (req, res) => {
     }
 });
 
-app.get("/form/:id", async (req, res) => {
-    const fileId = req.params.id;
-    const result = await accountOpenRequests.findOne({formPath: fileId}).catch(err => console.log(err.message));
-    if (!result) {
-        console.log("File not found.");
+app.post("/login-admin", async function (req, res) {
+    let UID = req.body.admin_id;
+    let password = req.body.password;
+    const user = await adminLoginCollection.findOne({
+        UID: UID
+    })
+    if (!user) {
+        res.send("No Admin ID found.")
     } else {
-        const file = fs.createReadStream(`./uploaded_forms/${fileId}`);
-        res.setHeader("Content-Type", "application/pdf");
-        file.pipe(res);
+        if (password === user.password) {
+            isAdminLogged = false;
+            name = user.name;
+            res.send("Successfully logged in with name: " + name);
+        } else {
+            res.send("Details do not match.");
+        }
     }
 });
 

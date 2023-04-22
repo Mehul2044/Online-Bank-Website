@@ -140,6 +140,21 @@ const AccountOpenRequests = new mongoose.Schema({
     }
 });
 
+const AdminLogins = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+    },
+    UID: {
+        type: String,
+        required: true,
+    },
+    password: {
+        type: String,
+        required: true,
+    }
+});
+
 module.exports = {
     accountCollection: mongoose.model("Account", Account),
     deleteAccountCollection: mongoose.model("Account Deletion", DeleteAccount),
@@ -147,7 +162,8 @@ module.exports = {
     queriesCollection: mongoose.model("Queries", Queries),
     transactionCollection: mongoose.model("Transactions", Transactions),
     loanRequestCollection: mongoose.model("Loan Requests", LoanRequest),
-    accountOpenRequests: mongoose.model("Account Open Requests", AccountOpenRequests)
+    accountOpenRequests: mongoose.model("Account Open Requests", AccountOpenRequests),
+    adminLoginCollection: mongoose.model("Admin Login", AdminLogins)
 };
 
 module.exports.connect = function () {
