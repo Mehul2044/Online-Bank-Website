@@ -277,6 +277,21 @@ app.get("/admin_main/loan/:acc_no", async function (req, res) {
     }
 });
 
+app.get("/admin_main/account_requests", async function (req, res) {
+    if (isAdminLogged) {
+        let accountOpen = await accountOpenRequests.find({status: "Pending"});
+        let openAccountLength = accountOpen.length;
+        res.render("account_requests", {
+            projectName: projectName,
+            name: adminName,
+            details: accountOpen,
+            length: openAccountLength
+        });
+    } else {
+        res.redirect("/");
+    }
+});
+
 app.post("/login-user", async (req, res) => {
     account_number = req.body.account_number;
     password = req.body.password;
@@ -317,7 +332,6 @@ app.post("/login-admin", async function (req, res) {
     }
 });
 
-// Accept loan request
 app.post("/admin_main/loan/accept", async function
     (req, res) {
     const loanId = req.body.loan_id;
@@ -334,7 +348,6 @@ app.post("/admin_main/loan/accept", async function
     }
 });
 
-// Reject loan request
 app.post("/admin_main/loan/reject", async function
     (req, res) {
     const loanId = req.body.loan_id;
@@ -366,7 +379,9 @@ app.post("/registration", upload.single("file"), (req, res) => {
         first_name: fName,
         last_name: lName,
         email: email,
-        formPath: file.filename
+        formPath: file.filename,
+        status: "Pending",
+        password: "NewAccount@123",
     });
     newRequest.save().then(() => res.redirect("/")).catch(err => console.log(err.message));
 });

@@ -137,6 +137,15 @@ const AccountOpenRequests = new mongoose.Schema({
     formPath: {
         type: String,
         required: true
+    },
+    status: {
+        type: String,
+        default: "Pending",
+        required: true,
+    },
+    password: {
+        type: String,
+        required: true,
     }
 });
 
