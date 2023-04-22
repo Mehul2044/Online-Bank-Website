@@ -33,6 +33,7 @@ const {accountOpenRequests} = require("./models/mongodb")
 const {adminLoginCollection} = require("./models/mongodb")
 
 const date = require("./custom_node_modules/date");
+const {del} = require("express/lib/application");
 
 const port = process.env.PORT;
 const projectName = "MyBank";
@@ -178,9 +179,38 @@ app.get("/main/loan", async function (req, res) {
     }
 });
 
-app.get("/admin_main", function (req, res) {
+app.get("/admin_main", async function (req, res) {
     if (isAdminLogged) {
-        res.render("admin_main", {name: adminName, projectName: projectName});
+        try {
+            const transactions = await transactionCollection.find({});
+            let transactions_length = transactions.length;
+            let amount = [];
+            let to_from = [];
+            let date = [];
+            let time = [];
+            for (let i = 0; i < transactions_length; i++) {
+                if (account_number === transactions[i].sender_acc_no.toString()) {
+                    amount.push("-" + transactions[i].amount.toString());
+                    to_from.push(transactions[i].recipient.toString());
+                } else if (account_number === transactions[i].recipient) {
+                    amount.push("+" + transactions[i].amount.toString());
+                    to_from.push(transactions[i].sender_acc_no.toString());
+                }
+                date.push(transactions[i].date);
+                time.push(transactions[i].time);
+            }
+            res.render("admin_main", {
+                name: adminName,
+                projectName: projectName,
+                transactions_length: transactions_length,
+                amount: amount,
+                to_from: to_from,
+                date: date,
+                time: time
+            });
+        } catch (error) {
+            console.log(error);
+        }
     } else {
         res.redirect("/");
     }
@@ -292,104 +322,83 @@ app.get("/admin_main/account_requests", async function (req, res) {
     }
 });
 
-app.get("/admin_main/delete_account", async function (req, res){
-    if (isAdminLogged){
+app.get("/admin_main/delete_account", async function (req, res) {
+    if (isAdminLogged) {
 
         let account_number = [];
         let reason = [];
         let aadhar_number = [];
         const del_acc = await deleteAccountCollection.find();
         const del_len = del_acc.length
-        for(let i = 0; i<del_len; i++){
+        for (let i = 0; i < del_len; i++) {
             account_number.push(del_acc[i].accountNumber.toString());
             reason.push(del_acc[i].reason.toString());
             aadhar_number.push(del_acc[i].aadhar.toString());
         }
-        res.render("delete_account",{
-            projectName : projectName,
-            account_number : account_number,
-            reason : reason,
-            aadhar_number : aadhar_number,
-            del_len : del_len,
+        res.render("delete_account", {
+            projectName: projectName,
+            account_number: account_number,
+            reason: reason,
+            aadhar_number: aadhar_number,
+            del_len: del_len,
             name: adminName,
-            del_acc : del_acc
+            del_acc: del_acc
         })
-    }
-    else {
+    } else {
         res.redirect("/");
     }
-})
+});
 
-app.get("/admin_main/deleteAccount/:acc_no", async function (req, res) {
-    let acc_no = req.params.acc_no;
-    if (isAdminLogged) {
-        const account_details = await accountCollection.findOne({_id: acc_no});
-        let dateString = date.getDate();
-        try {
-            const balanceDoc = await balanceCollection.findOne({accountNumber: acc_no});
-            const balance = balanceDoc.balance;
-            const transactions = await transactionCollection.find({
-                $or: [{sender_acc_no: acc_no}, {recipient: acc_no}],
-            });
-            let transactions_length = transactions.length;
-            let amount = [];
-            let to_from = [];
-            let date = [];
-            let time = [];
-            for (let i = 0; i < transactions_length; i++) {
-                if (acc_no === transactions[i].sender_acc_no.toString()) {
-                    amount.push("-" + transactions[i].amount.toString());
-                    to_from.push(transactions[i].recipient.toString());
-                } else if (acc_no === transactions[i].recipient) {
-                    amount.push("+" + transactions[i].amount.toString());
-                    to_from.push(transactions[i].sender_acc_no.toString());
+app.get("/admin_main/deleteAccount/:acc_no",
+    async function (req, res) {
+        let acc_no = req.params.acc_no;
+        if (isAdminLogged) {
+            const account_details = await accountCollection.findOne({_id: acc_no});
+            let dateString = date.getDate();
+            try {
+                const balanceDoc = await balanceCollection.findOne({accountNumber: acc_no});
+                const balance = balanceDoc.balance;
+                const transactions = await transactionCollection.find({
+                    $or: [{sender_acc_no: acc_no}, {recipient: acc_no}],
+                });
+                let transactions_length = transactions.length;
+                let amount = [];
+                let to_from = [];
+                let date = [];
+                let time = [];
+                for (let i = 0; i < transactions_length; i++) {
+                    if (acc_no === transactions[i].sender_acc_no.toString()) {
+                        amount.push("-" + transactions[i].amount.toString());
+                        to_from.push(transactions[i].recipient.toString());
+                    } else if (acc_no === transactions[i].recipient) {
+                        amount.push("+" + transactions[i].amount.toString());
+                        to_from.push(transactions[i].sender_acc_no.toString());
+                    }
+                    date.push(transactions[i].date);
+                    time.push(transactions[i].time);
                 }
-                date.push(transactions[i].date);
-                time.push(transactions[i].time);
+                res.render("admin_account_viewing", {
+                    projectName: projectName,
+                    fName: account_details.firstName,
+                    dates: dateString,
+                    lName: account_details.lastName,
+                    acc_no: acc_no,
+                    balance: balance,
+                    transactions_length: transactions_length,
+                    amount: amount,
+                    to_from: to_from,
+                    date: date,
+                    time: time,
+                    eMail: eMail,
+                    name: adminName
+                });
+            } catch (err) {
+                console.log(err);
             }
-            res.render("admin_account_viewing", {
-                projectName: projectName,
-                fName: account_details.firstName,
-                dates: dateString,
-                lName: account_details.lastName,
-                acc_no: acc_no,
-                balance: balance,
-                transactions_length: transactions_length,
-                amount: amount,
-                to_from: to_from,
-                date: date,
-                time: time,
-                eMail: eMail,
-                name: adminName
-            });
-        } catch (err) {
-            console.log(err);
-        }
-    } else {
-        res.redirect("/");
-    }
-});
-
-app.post("/login-user", async (req, res) => {
-    account_number = req.body.account_number;
-    password = req.body.password;
-    const user = await accountCollection.findOne({
-        _id: account_number
-    })
-    if (!user) {
-        res.send("Account does not exist")
-    } else {
-        if (password === user.password) {
-            isLogged = true;
-            firstName = user.firstName;
-            lastName = user.lastName;
-            eMail = user.eMail;
-            res.redirect("/main")
         } else {
-            res.send("Details do not match");
+            res.redirect("/");
         }
-    }
-});
+    });
 
 app.post("/login-admin", async function (req, res) {
     let UID = req.body.admin_id;
@@ -434,11 +443,119 @@ app.post("/admin_main/loan/reject", async function
             {_id: loanId},
             {$set: {status: "Rejected"}}
         );
-        console.log(result);
         res.redirect("/admin_main/loan");
     } catch (error) {
         console.error(error);
         res.status(500).send("An error occurred while rejecting the loan request.");
+    }
+});
+
+app.post("/admin_main/account_requests/accept", async function
+    (req, res) {
+    const accountRequestId = req.body.request_id;
+    try {
+        await accountOpenRequests.updateOne(
+            {_id: accountRequestId},
+            {$set: {status: "Accepted"}}
+        );
+        const result = await accountOpenRequests.findOne({
+            _id: accountRequestId
+        });
+        await accountCollection.create({
+            firstName: result.first_name,
+            lastName: result.last_name,
+            eMail: result.email,
+            password: result.password,
+        });
+        const acc_no = await accountCollection.findOne({
+            firstName: result.first_name,
+            lastName: result.last_name,
+            eMail: result.email,
+            password: result.password
+        })
+        await balanceCollection.create({
+            accountNumber: acc_no._id,
+            balance: 0
+        });
+        res.redirect("/admin_main");
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("An error occurred while accepting account opening requests.");
+    }
+});
+
+app.post("/admin_main/account_requests/reject", async function (
+    req, res) {
+    const accountRequestId = req.body.request_id;
+    try {
+        await accountOpenRequests.updateOne(
+            {_id: accountRequestId},
+            {$set: {status: "Rejected"}}
+        );
+        res.redirect("/admin_main");
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("An error occurred while rejecting account opening requests.");
+    }
+});
+
+app.post("/admin_main/del_acc/accept", async function
+    (req, res) {
+    const delAccountId = req.body.del_acc_id;
+    try {
+        await accountCollection.deleteOne({
+            _id: delAccountId
+        });
+        await balanceCollection.deleteOne({
+            accountNumber: delAccountId
+        });
+        await deleteAccountCollection.deleteOne({
+            accountNumber: delAccountId
+        });
+        res.redirect("/admin_main");
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("An error occurred.");
+    }
+});
+
+app.post("/admin_main/del_acc/reject", async function
+    (req, res) {
+    const delAccountId = req.body.del_acc_id;
+    try {
+        await deleteAccountCollection.deleteOne({
+            accountNumber: delAccountId
+        });
+        res.redirect("/admin_main");
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("An error occurred.");
+    }
+});
+
+app.post("/admin_main/del_acc/reject", async function
+    (req, res) {
+
+});
+
+app.post("/login-user", async (req, res) => {
+    account_number = req.body.account_number;
+    password = req.body.password;
+    const user = await accountCollection.findOne({
+        _id: account_number
+    })
+    if (!user) {
+        res.send("Account does not exist")
+    } else {
+        if (password === user.password) {
+            isLogged = true;
+            firstName = user.firstName;
+            lastName = user.lastName;
+            eMail = user.eMail;
+            res.redirect("/main")
+        } else {
+            res.send("Details do not match");
+        }
     }
 });
 
