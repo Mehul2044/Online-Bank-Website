@@ -186,10 +186,31 @@ app.get("/admin_main", function (req, res) {
     }
 });
 
-app.get("/admin_main/loan", function (req, res) {
-    if (isAdminLogged){
-        res.render("admin_loan", {projectName: projectName, name: adminName});
-    }else{
+app.get("/admin_main/loan", async function (req, res) {
+    if (isAdminLogged) {
+        let loan_amount = [];
+        let loan_type = [];
+        let reason = [];
+        let credit_score = [];
+        const loans = await loanRequestCollection.find({status: "Pending"});
+        let loan_length = loans.length;
+        for (let i = 0; i < loan_length; i++) {
+            loan_amount.push(loans[i].loan_amount.toString());
+            loan_type.push(loans[i].loan_type.toString());
+            reason.push(loans[i].reason.toString());
+            credit_score.push(Math.floor(Math.random() * 201) + 700);
+        }
+        res.render("admin_loan", {
+            projectName: projectName,
+            name: adminName,
+            loan_type: loan_type,
+            loan_length: loan_length,
+            reason: reason,
+            credit_score: credit_score,
+            loan_amount: loan_amount,
+            loans: loans
+        });
+    } else {
         res.redirect("/");
     }
 });
@@ -243,6 +264,38 @@ app.post("/login-admin", async function (req, res) {
         } else {
             res.send("Details do not match.");
         }
+    }
+});
+
+// Accept loan request
+app.post("/admin_main/loan/accept", async function (req, res) {
+    const loanId = req.body.loan_id;
+    try {
+        const result = await loanRequestCollection.updateOne(
+            { _id: loanId },
+            { $set: { status: "Accepted" } }
+        );
+        console.log(result);
+        res.redirect("/admin_main/loan");
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("An error occurred while accepting the loan request.");
+    }
+});
+
+// Reject loan request
+app.post("/admin_main/loan/reject", async function (req, res) {
+    const loanId = req.body.loan_id;
+    try {
+        const result = await loanRequestCollection.updateOne(
+            { _id: loanId },
+            { $set: { status: "Rejected" } }
+        );
+        console.log(result);
+        res.redirect("/admin_main/loan");
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("An error occurred while rejecting the loan request.");
     }
 });
 

@@ -1,0 +1,28 @@
+.heading {
+    margin-left: 3rem;
+    margin-top: 5rem;
+}
+
+.heading-row{
+    text-align: center;
+    border: 1px solid;
+    margin-top: 1.5%;
+    width: 80%;
+}
+
+.heading-row .heading-column {
+    border: 1px solid;
+    padding: 1%;
+    background-color: lightblue;
+}
+
+.loan-row {
+    border: 1px solid grey;
+    width: 80%;
+    text-align: center;
+}
+
+.heading-column {
+    border: 1px solid grey;
+    padding: 0.5%;
+}
