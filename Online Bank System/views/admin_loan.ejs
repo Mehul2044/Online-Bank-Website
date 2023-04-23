@@ -1,5 +1,5 @@
 <%- include("partials/header") %>
-<title><%= projectName %></title>
+<title xmlns="http://www.w3.org/1999/html"><%= projectName %></title>
 <link rel="stylesheet" href="/css/admin_loan.css">
 </head>
 
@@ -7,8 +7,28 @@
 
 <%- include("partials/nav_admin") %>
 
+<div style="margin-top: 6rem"></div>
+
+<form class="d-flex" style="width: 40%; margin-top: 1rem; margin-left: 2rem" method="post"
+      action="/admin_main/loan/search_query">
+    <select class="form-select" aria-label="Default select example" name="search_query">
+        <option selected>Open this select menu</option>
+        <option value="Home Loan">Home Loan</option>
+        <option value="Education Loan">Education Loan</option>
+        <option value="Car Loan">Car Loan</option>
+        <option value="Personal Loan">Personal Loan</option>
+        <option value="Mortgage Loan">Mortgage Loan</option>
+    </select>
+    <button type="submit" class="btn btn-outline-success" style="margin-left: 2rem">Search</button>
+</form>
+
+<form class="d-flex" role="search" style="width: 40%; padding: 2%;" method="post"
+      action="/admin_main/loan/search_all">
+    <button class="btn btn-outline-success" type="submit">View All Pending Loans</button>
+</form>
+
 <% if (loan_length > 0) { %>
-    <div style="margin-top: 5rem"></div>
+
     <h1 class="heading"><i>Pending Loan Status..</i></h1>
     <div class="d-flex justify-content-center">
         <div class="row heading-row">
@@ -45,10 +65,11 @@
             </div>
         </div>
     <% } %>
-    <p style="margin-top: 5rem; margin-left: 1.5rem">** Please note that Accept or Reject is final and cannot be reverted.</p>
+    <p style="margin-top: 5rem; margin-left: 1.5rem">** Please note that Accept or Reject is final and cannot be
+        reverted.</p>
 
 <% } else { %>
-    <div style="margin-left: 47%; margin-top: 25%">No Pending Loans to approve!</div>
+    <div style="margin-left: 47%; margin-top: 20%">No Pending Loans to approve!</div>
 <% } %>
 </body>
 </html>

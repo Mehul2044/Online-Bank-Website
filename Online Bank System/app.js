@@ -620,6 +620,68 @@ app.post("/admin_main/view_transactions/search-all", async function
     }
 });
 
+app.post("/admin_main/loan/search_query", async function
+    (req, res) {
+    const loanType = req.body.search_query;
+    if (isAdminLogged) {
+        let loan_amount = [];
+        let loan_type = [];
+        let reason = [];
+        let credit_score = [];
+        const loans = await loanRequestCollection.find({$and: [{loan_type: loanType}, {status: "Pending"}]});
+        let loan_length = loans.length;
+        for (let i = 0; i < loan_length; i++) {
+            loan_amount.push(loans[i].loan_amount.toString());
+            loan_type.push(loans[i].loan_type.toString());
+            reason.push(loans[i].reason.toString());
+            credit_score.push(Math.floor(Math.random() * 201) + 700);
+        }
+        res.render("admin_loan", {
+            projectName: projectName,
+            name: adminName,
+            loan_type: loan_type,
+            loan_length: loan_length,
+            reason: reason,
+            credit_score: credit_score,
+            loan_amount: loan_amount,
+            loans: loans
+        });
+    } else {
+        res.redirect("/");
+    }
+});
+
+app.post("/admin_main/loan/search_all", async function
+    (req, res) {
+    const loanType = req.body.search_query;
+    if (isAdminLogged) {
+        let loan_amount = [];
+        let loan_type = [];
+        let reason = [];
+        let credit_score = [];
+        const loans = await loanRequestCollection.find({status: "Pending"});
+        let loan_length = loans.length;
+        for (let i = 0; i < loan_length; i++) {
+            loan_amount.push(loans[i].loan_amount.toString());
+            loan_type.push(loans[i].loan_type.toString());
+            reason.push(loans[i].reason.toString());
+            credit_score.push(Math.floor(Math.random() * 201) + 700);
+        }
+        res.render("admin_loan", {
+            projectName: projectName,
+            name: adminName,
+            loan_type: loan_type,
+            loan_length: loan_length,
+            reason: reason,
+            credit_score: credit_score,
+            loan_amount: loan_amount,
+            loans: loans
+        });
+    } else {
+        res.redirect("/");
+    }
+});
+
 app.post("/login-user", async (req, res) => {
     account_number = req.body.account_number;
     password = req.body.password;
@@ -697,7 +759,7 @@ app.post("/main/transfer", async (req, res) => {
     let sender_account = account_number;
     let recipient_acc_no = req.body.recipient_acc_no;
     let passwd = req.body.passwd;
-    if (passwd == password) {
+    if (passwd === password) {
         let amount = Number(req.body.amount);
         balanceCollection.findOne({accountNumber: sender_account})
             .then(sender_balance_doc => {
@@ -720,7 +782,7 @@ app.post("/main/transfer", async (req, res) => {
             })
             .then(() => res.redirect("/main"))
             .catch(err => console.log(err.message));
-    }else {
+    } else {
         res.send("Incorrect password");
     }
 });
