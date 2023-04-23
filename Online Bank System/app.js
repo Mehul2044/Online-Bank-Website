@@ -93,7 +93,7 @@ app.get("/contact_us", function (req, res) {
 
 app.get("/main", async function (req, res) {
     if (isLogged) {
-        let dateString = dateString.getDate();
+        let date_string = dateString.getDate();
         try {
             const balanceDoc = await balanceCollection.findOne({accountNumber: account_number});
             const balance = balanceDoc.balance;
@@ -119,7 +119,7 @@ app.get("/main", async function (req, res) {
             res.render("main", {
                 projectName: projectName,
                 fName: firstName,
-                dates: dateString,
+                dates: date_string,
                 lName: lastName,
                 acc_no: account_number,
                 balance: balance,
@@ -134,7 +134,7 @@ app.get("/main", async function (req, res) {
             console.log(err);
         }
     } else {
-        res.redirect("/login");
+        res.redirect("/");
     }
 });
 
@@ -142,7 +142,7 @@ app.get("/main/transfer", function (req, res) {
     if (isLogged) {
         res.render("transfer", {projectName: projectName, fName: firstName, eMail: eMail});
     } else {
-        res.redirect("/login");
+        res.redirect("/");
     }
 });
 
@@ -150,7 +150,7 @@ app.get("/main/view_profile", function (req, res) {
     if (isLogged) {
         res.render("view_profile", {projectName: projectName, fName: firstName, lName: lastName, eMail: eMail});
     } else {
-        res.redirect("/login");
+        res.redirect("/");
     }
 });
 
@@ -175,25 +175,25 @@ app.get("/main/loan", async function (req, res) {
             loan_length: loan_length, loan_type: loan_type, amount: amount, loan_status: status
         });
     } else {
-        res.redirect("/login");
+        res.redirect("/");
     }
 });
 
 app.get("/admin_main", async function (req, res) {
     if (isAdminLogged) {
-            res.render("admin_main", {
-                name: adminName,
-                projectName: projectName,
-                assets: "$500 billion",
-                liabilities: "$400 billion",
-                revenue: "$50 billion",
-                profits: "$10 billion",
-                loan_portfolios: "$10 billion",
-                credit_risk: "5%",
-                market_risk: "2.5%",
-                dateString:dateString.getDate(),
-                stockprice: "$44.20 per share",
-            });
+        res.render("admin_main", {
+            name: adminName,
+            projectName: projectName,
+            assets: "$500 billion",
+            liabilities: "$400 billion",
+            revenue: "$50 billion",
+            profits: "$10 billion",
+            loan_portfolios: "$10 billion",
+            credit_risk: "5%",
+            market_risk: "2.5%",
+            dateString: dateString.getDate(),
+            stockprice: "$44.20 per share",
+        });
     } else {
         res.redirect("/");
     }
@@ -276,7 +276,7 @@ app.get("/admin_main/loan/:acc_no", async function (req, res) {
     let acc_no = req.params.acc_no;
     if (isAdminLogged) {
         const account_details = await accountCollection.findOne({_id: acc_no});
-        let dateString = date.getDate();
+        let date_string = dateString.getDate();
         try {
             const balanceDoc = await balanceCollection.findOne({accountNumber: acc_no});
             const balance = balanceDoc.balance;
@@ -302,7 +302,7 @@ app.get("/admin_main/loan/:acc_no", async function (req, res) {
             res.render("admin_account_viewing", {
                 projectName: projectName,
                 fName: account_details.firstName,
-                dates: dateString,
+                dates: date_string,
                 lName: account_details.lastName,
                 acc_no: acc_no,
                 balance: balance,
@@ -369,7 +369,7 @@ app.get("/admin_main/deleteAccount/:acc_no",
         let acc_no = req.params.acc_no;
         if (isAdminLogged) {
             const account_details = await accountCollection.findOne({_id: acc_no});
-            let dateString = date.getDate();
+            let date_string = dateString.getDate();
             try {
                 const balanceDoc = await balanceCollection.findOne({accountNumber: acc_no});
                 const balance = balanceDoc.balance;
@@ -395,7 +395,7 @@ app.get("/admin_main/deleteAccount/:acc_no",
                 res.render("admin_account_viewing", {
                     projectName: projectName,
                     fName: account_details.firstName,
-                    dates: dateString,
+                    dates: date_string,
                     lName: account_details.lastName,
                     acc_no: acc_no,
                     balance: balance,
@@ -548,6 +548,78 @@ app.post("/admin_main/del_acc/reject", async function
     }
 });
 
+app.post("/admin_main/view_transactions/search-specific", async function
+    (req, res) {
+    if (isAdminLogged) {
+        const acc_no = req.body.search_query;
+        try {
+            const transactions = await transactionCollection.find({
+                $or: [{sender_acc_no: acc_no}, {recipient: acc_no}],
+            });
+            let transactions_length = transactions.length;
+            let amount = [];
+            let to_from = [];
+            let date = [];
+            let time = [];
+            for (let i = 0; i < transactions_length; i++) {
+                amount.push(transactions[i].amount);
+                to_from.push(transactions[i].recipient + "   /   " + transactions[i].sender_acc_no);
+                date.push(transactions[i].date);
+                time.push(transactions[i].time);
+            }
+            res.render("admin_view_transactions", {
+                name: adminName,
+                projectName: projectName,
+                transactions_length: transactions_length,
+                amount: amount,
+                to_from: to_from,
+                date: date,
+                time: time,
+            });
+        } catch (error) {
+            console.log(error);
+            res.status(500).send("An error occurred.");
+        }
+    } else {
+        res.redirect("/");
+    }
+});
+
+app.post("/admin_main/view_transactions/search-all", async function
+    (req, res) {
+    if (isAdminLogged) {
+        const acc_no = req.body.search_query;
+        try {
+            const transactions = await transactionCollection.find({});
+            let transactions_length = transactions.length;
+            let amount = [];
+            let to_from = [];
+            let date = [];
+            let time = [];
+            for (let i = 0; i < transactions_length; i++) {
+                amount.push(transactions[i].amount);
+                to_from.push(transactions[i].recipient + "   /   " + transactions[i].sender_acc_no);
+                date.push(transactions[i].date);
+                time.push(transactions[i].time);
+            }
+            res.render("admin_view_transactions", {
+                name: adminName,
+                projectName: projectName,
+                transactions_length: transactions_length,
+                amount: amount,
+                to_from: to_from,
+                date: date,
+                time: time,
+            });
+        } catch (error) {
+            console.log(error);
+            res.status(500).send("An error occurred.");
+        }
+    } else {
+        res.redirect("/");
+    }
+});
+
 app.post("/login-user", async (req, res) => {
     account_number = req.body.account_number;
     password = req.body.password;
@@ -624,29 +696,33 @@ app.post("/main/update_password", function (req, res) {
 app.post("/main/transfer", async (req, res) => {
     let sender_account = account_number;
     let recipient_acc_no = req.body.recipient_acc_no;
-    let amount = Number(req.body.amount);
-
-    balanceCollection.findOne({accountNumber: sender_account})
-        .then(sender_balance_doc => {
-            let sender_balance = sender_balance_doc.balance;
-            if (sender_balance < amount) {
-                res.send("Balance insufficient!");
-            } else {
-                balanceCollection.updateOne(
-                    {accountNumber: recipient_acc_no}, {$inc: {balance: amount}},).catch(err => console.log(err.message));
-                balanceCollection.updateOne(
-                    {accountNumber: sender_account}, {$inc: {balance: -amount}},).catch(err => console.log(err.message));
-                transactionCollection.create({
-                    sender_acc_no: sender_account,
-                    amount: amount,
-                    recipient: recipient_acc_no,
-                    date: new Date().toLocaleString().slice(0, 9).replace('T', ' '),
-                    time: new Date().toLocaleString().slice(11, 19).replace('T', ' ')
-                },).catch(err => console.log(err.message));
-            }
-        })
-        .then(() => res.redirect("/main"))
-        .catch(err => console.log(err.message));
+    let passwd = req.body.passwd;
+    if (passwd == password) {
+        let amount = Number(req.body.amount);
+        balanceCollection.findOne({accountNumber: sender_account})
+            .then(sender_balance_doc => {
+                let sender_balance = sender_balance_doc.balance;
+                if (sender_balance < amount) {
+                    res.send("Balance insufficient!");
+                } else {
+                    balanceCollection.updateOne(
+                        {accountNumber: recipient_acc_no}, {$inc: {balance: amount}},).catch(err => console.log(err.message));
+                    balanceCollection.updateOne(
+                        {accountNumber: sender_account}, {$inc: {balance: -amount}},).catch(err => console.log(err.message));
+                    transactionCollection.create({
+                        sender_acc_no: sender_account,
+                        amount: amount,
+                        recipient: recipient_acc_no,
+                        date: new Date().toLocaleString().slice(0, 9).replace('T', ' '),
+                        time: new Date().toLocaleString().slice(11, 19).replace('T', ' ')
+                    },).catch(err => console.log(err.message));
+                }
+            })
+            .then(() => res.redirect("/main"))
+            .catch(err => console.log(err.message));
+    }else {
+        res.send("Incorrect password");
+    }
 });
 
 app.post("/main/delete_account", function (req, res) {

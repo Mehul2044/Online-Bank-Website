@@ -7,7 +7,7 @@
 
     .transaction-table {
         overflow-y: auto;
-        height: 10rem;
+        height: 15rem;
         margin-bottom: 5rem;
     }
 
@@ -50,10 +50,14 @@
 
 <div style="margin-top: 6rem"></div>
 
-<form class="d-flex" role="search" style="width: 40%; padding: 2%;">
-    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
-           style="background-color: lightblue; padding: 2%">
+<form class="d-flex" role="search" style="width: 40%; padding: 2%;" method="post" action="/admin_main/view_transactions/search-specific">
+    <input class="form-control me-2" type="search" placeholder="Search by Entering Account Number" aria-label="Search"
+           style="background-color: lightblue; padding: 2%" name="search_query">
     <button class="btn btn-outline-success" type="submit">Search</button>
+</form>
+
+<form class="d-flex" role="search" style="width: 40%; padding: 2%;" method="post" action="/admin_main/view_transactions/search-all">
+    <button class="btn btn-outline-success" type="submit">View All Transactions</button>
 </form>
 
 <div class="transaction-history">
