@@ -585,6 +585,56 @@ app.post("/admin_main/del_acc/reject", async function
     }
 });
 
+app.get("/admin_main/queries/:acc_no", async function (req, res) {
+    let acc_no = req.params.acc_no;
+    if (isAdminLogged) {
+        const account_details = await accountCollection.findOne({_id: acc_no});
+        let date_string = dateString.getDate();
+        try {
+            const balanceDoc = await balanceCollection.findOne({accountNumber: acc_no});
+            const balance = balanceDoc.balance;
+            const transactions = await transactionCollection.find({
+                $or: [{sender_acc_no: acc_no}, {recipient: acc_no}],
+            });
+            let transactions_length = transactions.length;
+            let amount = [];
+            let to_from = [];
+            let date = [];
+            let time = [];
+            for (let i = 0; i < transactions_length; i++) {
+                if (acc_no === transactions[i].sender_acc_no.toString()) {
+                    amount.push("-" + transactions[i].amount.toString());
+                    to_from.push(transactions[i].recipient.toString());
+                } else if (acc_no === transactions[i].recipient) {
+                    amount.push("+" + transactions[i].amount.toString());
+                    to_from.push(transactions[i].sender_acc_no.toString());
+                }
+                date.push(transactions[i].date);
+                time.push(transactions[i].time);
+            }
+            res.render("admin_account_viewing", {
+                projectName: projectName,
+                fName: account_details.firstName,
+                dates: date_string,
+                lName: account_details.lastName,
+                acc_no: acc_no,
+                balance: balance,
+                transactions_length: transactions_length,
+                amount: amount,
+                to_from: to_from,
+                date: date,
+                time: time,
+                eMail: eMail,
+                name: adminName
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    } else {
+        res.redirect("/");
+    }
+});
+
 app.post("/admin_main/view_queries/resolve", async function
     (req, res) {
     const queryId = req.body.query_id;
