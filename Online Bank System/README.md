@@ -9,3 +9,5 @@
 7. For Admin Login: Admin ID: `3456789012`, Password: `Demo@123`
 
 The GitHub link is https://github.com/Mehul2044/Online-Bank-Website
+
+Since we have used MongoDB Atlas(Online Database), dump is not required to start the project. You can just follow above instructions and start the server.
