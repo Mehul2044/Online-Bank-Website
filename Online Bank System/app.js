@@ -231,6 +231,43 @@ app.get("/admin_main/view_transactions", async function (req, res) {
     }
 });
 
+app.get("/admin_main/view_queries", async function (req, res) {
+    if (isAdminLogged) {
+        try {
+            const queries = await queriesCollection.find({status: "Pending"});
+            let query_length = queries.length;
+            let names = [];
+            let phones = [];
+            let acc_no = [];
+            let title = [];
+            let message = [];
+            for (let i = 0; i < query_length; i++) {
+                names.push(queries[i].name);
+                phones.push(queries[i].phone);
+                acc_no.push(queries[i].acc_no);
+                title.push(queries[i].title);
+                message.push(queries[i].message);
+            }
+            res.render("admin_queries", {
+                length: query_length,
+                projectName: projectName,
+                names: names,
+                phones: phones,
+                acc_no: acc_no,
+                title: title,
+                message: message,
+                details: queries,
+                name: adminName,
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    } else {
+        res.redirect("/main");
+    }
+})
+;
+
 app.get("/admin_main/loan", async function (req, res) {
     if (isAdminLogged) {
         let loan_amount = [];
@@ -253,7 +290,7 @@ app.get("/admin_main/loan", async function (req, res) {
             reason: reason,
             credit_score: credit_score,
             loan_amount: loan_amount,
-            loans: loans
+            loans: loans,
         });
     } else {
         res.redirect("/");
@@ -492,7 +529,7 @@ app.post("/admin_main/account_requests/accept", async function
             accountNumber: acc_no._id,
             balance: 0
         });
-        res.redirect("/admin_main");
+        res.redirect("/admin_main/account_requests");
     } catch (error) {
         console.log(error);
         res.status(500).send("An error occurred while accepting account opening requests.");
@@ -507,7 +544,7 @@ app.post("/admin_main/account_requests/reject", async function (
             {_id: accountRequestId},
             {$set: {status: "Rejected"}}
         );
-        res.redirect("/admin_main");
+        res.redirect("/admin_main/account_requests");
     } catch (error) {
         console.log(error);
         res.status(500).send("An error occurred while rejecting account opening requests.");
@@ -527,7 +564,7 @@ app.post("/admin_main/del_acc/accept", async function
         await deleteAccountCollection.deleteOne({
             accountNumber: delAccountId
         });
-        res.redirect("/admin_main");
+        res.redirect("/admin_main/del_acc");
     } catch (error) {
         console.log(error);
         res.status(500).send("An error occurred.");
@@ -541,10 +578,21 @@ app.post("/admin_main/del_acc/reject", async function
         await deleteAccountCollection.deleteOne({
             accountNumber: delAccountId
         });
-        res.redirect("/admin_main");
+        res.redirect("/admin_main/del_acc");
     } catch (error) {
         console.log(error);
         res.status(500).send("An error occurred.");
+    }
+});
+
+app.post("/admin_main/view_queries/resolve", async function
+    (req, res) {
+    const queryId = req.body.query_id;
+    try {
+        await queriesCollection.updateOne({_id: queryId}, {$set: {status: "Resolved"}});
+        res.redirect("/admin_main/view_queries");
+    } catch (error) {
+        console.log(error);
     }
 });
 
@@ -806,7 +854,8 @@ app.post("/contact_us", function (req, res) {
             phone: Number(ph_no),
             acc_no: null,
             title: title,
-            message: message
+            message: message,
+            status: "Pending"
         }).then(() => res.redirect("/main")).catch(err => console.log(err.message));
     } else {
         queriesCollection.create({
@@ -814,7 +863,8 @@ app.post("/contact_us", function (req, res) {
             phone: Number(ph_no),
             acc_no: account_number,
             title: title,
-            message: message
+            message: message,
+            status: "Pending"
         }).then(() => res.redirect("/main")).catch(err => console.log(err.message));
     }
 });

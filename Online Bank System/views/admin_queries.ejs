@@ -1,0 +1,50 @@
+<%- include("partials/header") %>
+<title><%= projectName %></title>
+<link rel="stylesheet" href="/css/admin_loan.css">
+</head>
+
+<body>
+
+<%- include("partials/nav_admin") %>
+
+<% if (length > 0) { %>
+    <div style="margin-top: 5rem"></div>
+    <h1 class="heading"><i>Pending Account Openings...</i></h1>
+    <div class="d-flex justify-content-center">
+        <div class="row heading-row">
+            <div class="col-sm-1 heading-column">#</div>
+            <div class="col-sm-1 heading-column">Name</div>
+            <div class="col-sm-2 heading-column">Phone</div>
+            <div class="col-sm-2 heading-column">Account Number</div>
+            <div class="col-sm-2 heading-column">Title</div>
+            <div class="col-sm-3 heading-column">Message</div>
+            <div class="col-sm-1 heading-column">-</div>
+        </div>
+    </div>
+    <% for (let i = 0; i < length; i++) { %>
+        <div class="d-flex justify-content-center">
+            <div class="row loan-row">
+                <div class="col-sm-1 heading-column"><%= i + 1 %></div>
+                <div class="col-sm-1 heading-column"><%= names[i] %></div>
+                <div class="col-sm-2 heading-column"><%= phones[i] %></div>
+                <div class="col-sm-2 heading-column"><%= acc_no[i] %></div>
+                <div class="col-sm-2 heading-column"><%= title[i] %></div>
+                <div class="col-sm-3 heading-column"><%= message[i] %></div>
+                <div class="col-sm-1 heading-column">
+                    <form action="/admin_main/view_queries/resolve" method="post">
+                        <input type="hidden" name="query_id" value="<%= details[i]._id %>">
+                        <button type="submit" class="btn btn-danger">Resolve</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        </div>
+    <% } %>
+    <p style="margin-top: 5rem; margin-left: 1.5rem">** Please note that Resolve is final and cannot be reverted.</p>
+
+<% } else { %>
+    <div style="margin-left: 47%; margin-top: 25%">No Pending Queries to resolve!</div>
+<% } %>
+
+</body>
+</html>

@@ -68,6 +68,11 @@ const Queries = new mongoose.Schema({
         type: String,
         required: true,
         maxLength: 200
+    },
+    status: {
+        type: String,
+        required: true,
+        default: "Pending"
     }
 });
 
