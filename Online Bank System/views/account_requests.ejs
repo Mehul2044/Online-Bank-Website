@@ -26,15 +26,15 @@
                 <div class="col-sm-1 heading-column"><%= i + 1 %></div>
                 <div class="col-sm-3 heading-column"><%= details[i].first_name %> <%= details[i].last_name %></div>
                 <div class="col-sm-3 heading-column"><%= details[i].email %></div>
-                <div class="col-sm-1 heading-column"><a href="/form/<%= details[i].formPath %>">Link</a></div>
+                <div class="col-sm-1 heading-column"><a href="/admin/admin_main/form/<%= details[i].formPath %>">Link</a></div>
                 <div class="col-sm-2 heading-column">
-                    <form action="/admin_main/account_requests/accept" method="post">
+                    <form action="/admin/admin_main/account_requests/accept" method="post">
                         <input type="hidden" name="request_id" value="<%= details[i]._id %>">
                         <button type="submit" class="btn btn-dark">Accept</button>
                     </form>
                 </div>
                 <div class="col-sm-2 heading-column">
-                    <form action="/admin_main/account_requests/reject" method="post">
+                    <form action="/admin/admin_main/account_requests/reject" method="post">
                         <input type="hidden" name="request_id" value="<%= details[i]._id %>">
                         <button type="submit" class="btn btn-danger">Reject</button>
                     </form>

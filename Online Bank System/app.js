@@ -14,7 +14,7 @@ app.use(express.static("assets"));
 app.set("view engine", "ejs");
 
 app.use("/", userRoutes)
-app.use("/admin_main",adminRoutes)
+app.use("/admin",adminRoutes)
 
 app.get("*", function (req, res) {
     res.render("page_not_found", {projectName: projectName});

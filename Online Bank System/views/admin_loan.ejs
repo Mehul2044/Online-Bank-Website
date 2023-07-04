@@ -10,7 +10,7 @@
 <div style="margin-top: 6rem"></div>
 
 <form class="d-flex" style="width: 40%; margin-top: 1rem; margin-left: 2rem" method="post"
-      action="/admin_main/loan/search_query">
+      action="/admin/admin_main/loan/search_query">
     <select class="form-select" aria-label="Default select example" name="search_query">
         <option selected>Open this select menu</option>
         <option value="Home Loan">Home Loan</option>
@@ -23,7 +23,7 @@
 </form>
 
 <form class="d-flex" role="search" style="width: 40%; padding: 2%;" method="post"
-      action="/admin_main/loan/search_all">
+      action="/admin/admin_main/loan/search_all">
     <button class="btn btn-outline-success" type="submit">View All Pending Loans</button>
 </form>
 
@@ -51,13 +51,13 @@
                 <div class="col-sm-1 heading-column"><%= credit_score[i] %></div>
                 <div class="col-sm-2 heading-column"><%= loan_amount[i] %></div>
                 <div class="col-sm-2 heading-column">
-                    <form action="/admin_main/loan/accept" method="post">
+                    <form action="/admin/admin_main/loan/accept" method="post">
                         <input type="hidden" name="loan_id" value="<%= loans[i]._id %>">
                         <button type="submit" class="btn btn-dark">Accept</button>
                     </form>
                 </div>
                 <div class="col-sm-2 heading-column">
-                    <form action="/admin_main/loan/reject" method="post">
+                    <form action="/admin/admin_main/loan/reject" method="post">
                         <input type="hidden" name="loan_id" value="<%= loans[i]._id %>">
                         <button type="submit" class="btn btn-danger">Reject</button>
                     </form>

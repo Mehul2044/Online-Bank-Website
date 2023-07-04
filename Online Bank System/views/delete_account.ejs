@@ -25,18 +25,18 @@
             <div class="row loan-row">
                 <div class="col-sm-1 heading-column"><%= i + 1 %></div>
                 <div class="col-sm-4 heading-column"><a
-                            href="/admin_main/deleteAccount/<%= del_acc[i].accountNumber %>"><%= account_number[i] %></a>
+                            href="/admin/admin_main/deleteAccount/<%= del_acc[i].accountNumber %>"><%= account_number[i] %></a>
                 </div>
                 <div class="col-sm-4 heading-column"><%= reason[i] %></div>
                 <div class="col-sm-1 heading-column"><%= aadhar_number[i] %></div>
                 <div class="col-sm-1 heading-column">
-                    <form action="/admin_main/del_acc/accept" method="post">
+                    <form action="/admin/admin_main/del_acc/accept" method="post">
                         <input type="hidden" name="del_acc_id" value="<%= del_acc[i].accountNumber %>">
                         <button type="submit" class="btn btn-dark">Accept</button>
                     </form>
                 </div>
                 <div class="col-sm-1 heading-column">
-                    <form action="/admin_main/del_acc/reject" method="post">
+                    <form action="/admin/admin_main/del_acc/reject" method="post">
                         <input type="hidden" name="del_acc_id" value="<%= del_acc[i].accountNumber %>">
                         <button type="submit" class="btn btn-danger">Reject</button>
                     </form>

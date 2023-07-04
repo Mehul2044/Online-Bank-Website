@@ -25,13 +25,13 @@
         <div class="d-flex justify-content-center">
             <div class="row loan-row">
                 <div class="col-sm-1 heading-column"><%= i + 1 %></div>
-                <div class="col-sm-1 heading-column"><a href="/admin_main/queries/<%= acc_no[i] %>"><%= names[i] %></a></div>
+                <div class="col-sm-1 heading-column"><a href="/admin/admin_main/queries/<%= acc_no[i] %>"><%= names[i] %></a></div>
                 <div class="col-sm-2 heading-column"><%= phones[i] %></div>
                 <div class="col-sm-2 heading-column"><%= acc_no[i] %></div>
                 <div class="col-sm-2 heading-column"><%= title[i] %></div>
                 <div class="col-sm-3 heading-column"><%= message[i] %></div>
                 <div class="col-sm-1 heading-column">
-                    <form action="/admin_main/view_queries/resolve" method="post">
+                    <form action="/admin/admin_main/view_queries/resolve" method="post">
                         <input type="hidden" name="query_id" value="<%= details[i]._id %>">
                         <button type="submit" class="btn btn-danger">Resolve</button>
                     </form>

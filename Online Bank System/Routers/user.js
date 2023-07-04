@@ -17,7 +17,7 @@ multer.diskStorage({
     }
 });
 
-const dir = path.join(__dirname, 'uploaded_forms');
+const dir = path.join("uploaded_forms");
 if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
 }
@@ -164,18 +164,6 @@ router.get("/main/loan", async function (req, res) {
         });
     } else {
         res.redirect("/");
-    }
-});
-
-router.get("/form/:id", async (req, res) => {
-    const fileId = req.params.id;
-    const result = await accountOpenRequests.findOne({formPath: fileId}).catch(err => console.log(err.message));
-    if (!result) {
-        console.log("File not found.");
-    } else {
-        const file = fs.createReadStream(`./uploaded_forms/${fileId}`);
-        res.setHeader("Content-Type", "application/pdf");
-        file.pipe(res);
     }
 });
 

@@ -22,7 +22,7 @@ router.get("/login-admin", function (req, res) {
     res.render("login_admin", {projectName: projectName});
 });
 
-router.get("/", async function (req, res) {
+router.get("/admin_main", async function (req, res) {
     if (isAdminLogged) {
         res.render("admin_main", {
             name: adminName,
@@ -42,7 +42,7 @@ router.get("/", async function (req, res) {
     }
 });
 
-router.get("/view_transactions", async function
+router.get("/admin_main/view_transactions", async function
     (req, res) {
     if (isAdminLogged) {
         try {
@@ -75,7 +75,7 @@ router.get("/view_transactions", async function
     }
 });
 
-router.get("/view_queries", async function (req, res) {
+router.get("/admin_main/view_queries", async function (req, res) {
     if (isAdminLogged) {
         try {
             const queries = await queriesCollection.find({status: "Pending"});
@@ -111,7 +111,7 @@ router.get("/view_queries", async function (req, res) {
     }
 });
 
-router.get("/loan", async function (req, res) {
+router.get("/admin_main/loan", async function (req, res) {
     if (isAdminLogged) {
         let loan_amount = [];
         let loan_type = [];
@@ -140,7 +140,7 @@ router.get("/loan", async function (req, res) {
     }
 });
 
-router.get("/loan/:acc_no", async function (req, res) {
+router.get("/admin_main/loan/:acc_no", async function (req, res) {
     let acc_no = req.params.acc_no;
     if (isAdminLogged) {
         const account_details = await accountCollection.findOne({_id: acc_no});
@@ -189,7 +189,7 @@ router.get("/loan/:acc_no", async function (req, res) {
     }
 });
 
-router.get("/account_requests", async function (req, res) {
+router.get("/admin_main/account_requests", async function (req, res) {
     if (isAdminLogged) {
         let accountOpen = await accountOpenRequests.find({status: "Pending"});
         let openAccountLength = accountOpen.length;
@@ -204,7 +204,7 @@ router.get("/account_requests", async function (req, res) {
     }
 });
 
-router.get("/delete_account", async function (req, res) {
+router.get("/admin_main/delete_account", async function (req, res) {
     if (isAdminLogged) {
 
         let account_number = [];
@@ -231,7 +231,24 @@ router.get("/delete_account", async function (req, res) {
     }
 });
 
-router.get("/deleteAccount/:acc_no",
+router.get("/admin_main/form/:id", async (req, res) => {
+    if (isAdminLogged){
+        const fileId = req.params.id;
+        const result = await accountOpenRequests.findOne({formPath: fileId}).catch(err => console.log(err.message));
+        if (!result) {
+            console.log("File not found.");
+        } else {
+            const file = fs.createReadStream(`./uploaded_forms/${fileId}`);
+            res.setHeader("Content-Type", "application/pdf");
+            file.pipe(res);
+        }
+    }else {
+        res.redirect("/");
+    }
+
+});
+
+router.get("/admin_main/deleteAccount/:acc_no",
     async function (req, res) {
         let acc_no = req.params.acc_no;
         if (isAdminLogged) {
@@ -282,7 +299,7 @@ router.get("/deleteAccount/:acc_no",
     });
 
 
-router.post("/login-admin", async function (req, res) {
+router.post("/admin_main/login-admin", async function (req, res) {
     let UID = req.body.admin_id;
     let password = req.body.password;
     const user = await adminLoginCollection.findOne({
@@ -294,14 +311,14 @@ router.post("/login-admin", async function (req, res) {
         if (password === user.password) {
             isAdminLogged = true;
             adminName = user.name;
-            res.redirect("/admin_main");
+            res.redirect("/admin/admin_main");
         } else {
             res.send("Details do not match.");
         }
     }
 });
 
-router.post("/loan/accept", async function
+router.post("/admin_main/loan/accept", async function
     (req, res) {
     const loanId = req.body.loan_id;
     try {
@@ -310,14 +327,14 @@ router.post("/loan/accept", async function
             {$set: {status: "Accepted"}}
         );
         console.log("ok");
-        res.redirect("/admin_main/loan");
+        res.redirect("/admin/admin_main/loan");
     } catch (error) {
         console.error(error);
         res.status(500).send("An error occurred while accepting the loan request.");
     }
 });
 
-router.post("/loan/reject", async function
+router.post("/admin_main/loan/reject", async function
     (req, res) {
     const loanId = req.body.loan_id;
     try {
@@ -325,14 +342,14 @@ router.post("/loan/reject", async function
             {_id: loanId},
             {$set: {status: "Rejected"}}
         );
-        res.redirect("/admin_main/loan");
+        res.redirect("/admin/admin_main/loan");
     } catch (error) {
         console.error(error);
         res.status(500).send("An error occurred while rejecting the loan request.");
     }
 });
 
-router.post("/account_requests/accept", async function
+router.post("/admin_main/account_requests/accept", async function
     (req, res) {
     const accountRequestId = req.body.request_id;
     try {
@@ -359,14 +376,14 @@ router.post("/account_requests/accept", async function
             accountNumber: acc_no._id,
             balance: 0
         });
-        res.redirect("/admin_main/account_requests");
+        res.redirect("/admin/admin_main/account_requests");
     } catch (error) {
         console.log(error);
         res.status(500).send("An error occurred while accepting account opening requests.");
     }
 });
 
-router.post("/account_requests/reject", async function (
+router.post("/admin_main/account_requests/reject", async function (
     req, res) {
     const accountRequestId = req.body.request_id;
     try {
@@ -374,14 +391,14 @@ router.post("/account_requests/reject", async function (
             {_id: accountRequestId},
             {$set: {status: "Rejected"}}
         );
-        res.redirect("/admin_main/account_requests");
+        res.redirect("/admin/admin_main/account_requests");
     } catch (error) {
         console.log(error);
         res.status(500).send("An error occurred while rejecting account opening requests.");
     }
 });
 
-router.post("/del_acc/accept", async function
+router.post("/admin_main/del_acc/accept", async function
     (req, res) {
     const delAccountId = req.body.del_acc_id;
     try {
@@ -394,28 +411,28 @@ router.post("/del_acc/accept", async function
         await deleteAccountCollection.deleteOne({
             accountNumber: delAccountId
         });
-        res.redirect("/admin_main/delete_account");
+        res.redirect("/admin/admin_main/delete_account");
     } catch (error) {
         console.log(error);
         res.status(500).send("An error occurred.");
     }
 });
 
-router.post("/del_acc/reject", async function
+router.post("/admin_main/del_acc/reject", async function
     (req, res) {
     const delAccountId = req.body.del_acc_id;
     try {
         await deleteAccountCollection.deleteOne({
             accountNumber: delAccountId
         });
-        res.redirect("/admin_main/delete_account");
+        res.redirect("/admin/admin_main/delete_account");
     } catch (error) {
         console.log(error);
         res.status(500).send("An error occurred.");
     }
 });
 
-router.get("/queries/:acc_no", async function (req, res) {
+router.get("/admin_main/queries/:acc_no", async function (req, res) {
     let acc_no = req.params.acc_no;
     if (isAdminLogged) {
         const account_details = await accountCollection.findOne({_id: acc_no});
@@ -464,18 +481,18 @@ router.get("/queries/:acc_no", async function (req, res) {
     }
 });
 
-router.post("/view_queries/resolve", async function
+router.post("/admin_main/view_queries/resolve", async function
     (req, res) {
     const queryId = req.body.query_id;
     try {
         await queriesCollection.updateOne({_id: queryId}, {$set: {status: "Resolved"}});
-        res.redirect("/admin_main/view_queries");
+        res.redirect("/admin/admin_main/view_queries");
     } catch (error) {
         console.log(error);
     }
 });
 
-router.post("/view_transactions/search-specific", async function
+router.post("/admin_main/view_transactions/search-specific", async function
     (req, res) {
     if (isAdminLogged) {
         const acc_no = req.body.search_query;
@@ -512,7 +529,7 @@ router.post("/view_transactions/search-specific", async function
     }
 });
 
-router.post("/view_transactions/search-all", async function
+router.post("/admin_main/view_transactions/search-all", async function
     (req, res) {
     if (isAdminLogged) {
         const acc_no = req.body.search_query;
@@ -547,7 +564,7 @@ router.post("/view_transactions/search-all", async function
     }
 });
 
-router.post("/loan/search_query", async function
+router.post("/admin_main/loan/search_query", async function
     (req, res) {
     const loanType = req.body.search_query;
     if (isAdminLogged) {
@@ -578,7 +595,7 @@ router.post("/loan/search_query", async function
     }
 });
 
-router.post("/loan/search_all", async function
+router.post("/admin_main/loan/search_all", async function
     (req, res) {
     const loanType = req.body.search_query;
     if (isAdminLogged) {
