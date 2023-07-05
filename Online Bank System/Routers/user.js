@@ -1,11 +1,8 @@
 const  { Router } = require("express")
 const router = Router()
-const bodyParse = require("body-parser");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-
-const collection = require("../models/mongodb");
 const upload = multer({dest: "uploaded_forms/"});
 
 multer.diskStorage({
@@ -31,8 +28,6 @@ const {loanRequestCollection} = require("../models/mongodb")
 const {accountOpenRequests} = require("../models/mongodb")
 
 const dateString = require("../custom_node_modules/date");
-const {del} = require("express/lib/application");
-
 const projectName = "MyBank";
 
 let isLogged = false;
