@@ -1,4 +1,4 @@
-const  { Router } = require("express")
+const {Router} = require("express")
 const fs = require("fs");
 const router = Router();
 
@@ -35,7 +35,7 @@ router.get("/admin_main", async function (req, res) {
             credit_risk: "5%",
             market_risk: "2.5%",
             dateString: dateString.getDate(),
-            stockprice: "$44.20 per share",
+            stockPrice: "$44.20 per share",
         });
     } else {
         res.redirect("/");
@@ -232,7 +232,7 @@ router.get("/admin_main/delete_account", async function (req, res) {
 });
 
 router.get("/admin_main/form/:id", async (req, res) => {
-    if (isAdminLogged){
+    if (isAdminLogged) {
         const fileId = req.params.id;
         const result = await accountOpenRequests.findOne({formPath: fileId}).catch(err => console.log(err.message));
         if (!result) {
@@ -242,7 +242,7 @@ router.get("/admin_main/form/:id", async (req, res) => {
             res.setHeader("Content-Type", "application/pdf");
             file.pipe(res);
         }
-    }else {
+    } else {
         res.redirect("/");
     }
 
